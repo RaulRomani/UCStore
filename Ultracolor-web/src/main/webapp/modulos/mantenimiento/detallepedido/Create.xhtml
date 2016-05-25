@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+  <ui:composition>
+
+    <p:dialog id="DetallepedidoCreateDlg" widgetVar="DetallepedidoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateDetallepedidoTitle}">
+      <h:form id="DetallepedidoCreateForm">
+        <h:panelGroup id="display">
+          <p:panelGrid columns="2" rendered="#{detallepedidoController.selected != null}">
+            <p:outputLabel value="#{bundle.CreateDetallepedidoLabel_idDetallepedido}" for="idDetallepedido" />
+            <p:inputText id="idDetallepedido" value="#{detallepedidoController.selected.idDetallepedido}" title="#{bundle.CreateDetallepedidoTitle_idDetallepedido}" required="true" requiredMessage="#{bundle.CreateDetallepedidoRequiredMessage_idDetallepedido}"/>
+            <p:outputLabel value="#{bundle.CreateDetallepedidoLabel_cantidad}" for="cantidad" />
+            <p:inputText id="cantidad" value="#{detallepedidoController.selected.cantidad}" title="#{bundle.CreateDetallepedidoTitle_cantidad}" required="true" requiredMessage="#{bundle.CreateDetallepedidoRequiredMessage_cantidad}"/>
+            <p:outputLabel value="#{bundle.CreateDetallepedidoLabel_precio}" for="precio" />
+            <p:inputText id="precio" value="#{detallepedidoController.selected.precio}" title="#{bundle.CreateDetallepedidoTitle_precio}" required="true" requiredMessage="#{bundle.CreateDetallepedidoRequiredMessage_precio}"/>
+            <p:outputLabel value="#{bundle.CreateDetallepedidoLabel_importe}" for="importe" />
+            <p:inputText id="importe" value="#{detallepedidoController.selected.importe}" title="#{bundle.CreateDetallepedidoTitle_importe}" required="true" requiredMessage="#{bundle.CreateDetallepedidoRequiredMessage_importe}"/>
+            <p:outputLabel value="#{bundle.CreateDetallepedidoLabel_recibido}" for="recibido" />
+            <p:selectBooleanCheckbox id="recibido" value="#{detallepedidoController.selected.recibido}" required="true" requiredMessage="#{bundle.EditDetallepedidoRequiredMessage_recibido}"/>
+            <p:outputLabel value="#{bundle.CreateDetallepedidoLabel_fecha}" for="fecha" />
+            <p:calendar id="fecha" pattern="MM/dd/yyyy HH:mm:ss" value="#{detallepedidoController.selected.fecha}" title="#{bundle.EditDetallepedidoTitle_fecha}" required="true" requiredMessage="#{bundle.EditDetallepedidoRequiredMessage_fecha}" showOn="button"/>
+            <p:outputLabel value="#{bundle.CreateDetallepedidoLabel_idProducto}" for="idProducto" />
+            <p:selectOneMenu id="idProducto" value="#{detallepedidoController.selected.idProducto}" required="true" requiredMessage="#{bundle.EditDetallepedidoRequiredMessage_idProducto}">
+              <f:selectItems value="#{productoController.itemsAvailableSelectOne}"
+                             var="idProductoItem"
+                             itemValue="#{idProductoItem}"/>
+            </p:selectOneMenu>
+            <p:outputLabel value="#{bundle.CreateDetallepedidoLabel_idPedidocompra}" for="idPedidocompra" />
+            <p:selectOneMenu id="idPedidocompra" value="#{detallepedidoController.selected.idPedidocompra}" required="true" requiredMessage="#{bundle.EditDetallepedidoRequiredMessage_idPedidocompra}">
+              <f:selectItems value="#{pedidocompraController.itemsAvailableSelectOne}"
+                             var="idPedidocompraItem"
+                             itemValue="#{idPedidocompraItem}"/>
+            </p:selectOneMenu>
+          </p:panelGrid>
+          <p:commandButton actionListener="#{detallepedidoController.create}" value="#{bundle.Save}" update="display,:DetallepedidoListForm:datalist,:growl" oncomplete="handleSubmit(args,'DetallepedidoCreateDialog');"/>
+          <p:commandButton value="#{bundle.Cancel}" onclick="DetallepedidoCreateDialog.hide()"/>
+        </h:panelGroup>
+      </h:form>
+    </p:dialog>
+
+  </ui:composition>
+</html>

@@ -1,0 +1,192 @@
+
+
+.footer{
+  height: 100px;
+  padding: 30px;
+  background: #F1F1F1;
+  margin-top: 30px;
+  
+}
+
+.main-content {
+  padding-bottom: 50px;
+}
+
+.MostrarImagen{
+  background-color: #CCCCCC;
+}
+
+.action-btn{
+  color: white !important;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+.foto-user{
+  height: 32px;
+  width: 32px;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.footer{
+
+  /*  clear: both;
+    position: relative;
+    z-index: 10;*/
+
+  padding: 20px 0px;
+  margin-top: 1.5em;
+  background: #55B241;
+  color: white;
+
+}
+
+.copyright{
+  text-align: center;
+}
+
+.logo{
+  height: 50px;
+  width: 150px;
+}
+
+.container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+  margin-left: 0px;
+  margin-right: 15px;
+  padding: 0px;
+
+}
+
+
+/*        SB ADMIN CSS ***/
+
+.panel-yellow {
+    border-color: #f0ad4e;
+}
+
+.panel-yellow .panel-heading {
+    border-color: #f0ad4e;
+    color: #fff;
+    background-color: #f0ad4e;
+}
+
+.panel-yellow a {
+    color: #f0ad4e;
+}
+
+.panel-yellow a:hover {
+    color: #df8a13;
+}
+
+
+.panel-green {
+    border-color: #5cb85c;
+}
+
+.panel-green .panel-heading {
+    border-color: #5cb85c;
+    color: #fff;
+    background-color: #5cb85c;
+}
+
+.panel-green a {
+    color: #5cb85c;
+}
+
+.panel-green a:hover {
+    color: #3d8b3d;
+}
+
+.panel-red {
+    border-color: #d9534f;
+}
+
+.panel-red .panel-heading {
+    border-color: #d9534f;
+    color: #fff;
+    background-color: #d9534f;
+}
+
+.panel-red a {
+    color: #d9534f;
+}
+
+.panel-red a:hover {
+    color: #b52b27;
+}
+
+.huge {
+    font-size: 40px;
+}
+
+
+
+/************ VENTAS  ***********/
+
+.ventas-left {
+  /*border-width: thin;*/
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-right-color: #CCCCCC;
+}
+.ventas-right {
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: #CCCCCC;
+  
+}
+
+
+
+
+/*
+
+.pacienteList td:nth-child(10) {
+    width: 160px;
+}
+
+.pacienteList th:nth-child(10) {
+    width: 160px;
+}
+
+*/
+/********* PRIMEFACES CSS ******/
+
+.ui-widget-header{
+  border: none;
+  background: none;
+}
+.ui-datepicker-trigger {
+display: inline-block !important;
+}
+
+.btn:focus {
+  outline: none;
+}
+button:focus {
+  outline: none;
+}
+
+.ui-selectonemenu{
+  padding-right: 1em;
+}
+
+.ui-selectonemenu .ui-selectonemenu-trigger{
+  padding: 0 0;
+}
+
+.ui-radiobutton .ui-radiobutton-box{
+  box-sizing: content-box;
+}
+
+.ui-selectoneradio label{
+margin-left: 4px;
+margin-right: 10px;
+}
+
+
+
