@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
   <h:head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -29,7 +30,7 @@
   <h:body>
 
     <div class="container">    
-      
+
       <p:growl id="growl" sticky="true" showDetail="true" />
 
       <div class="col-sm-12" align="center">
@@ -49,17 +50,30 @@
             <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
 
             <!--<form id="loginform" class="form-horizontal" role="form">-->
-            <h:form class="form-horizontal">
+            <h:form class="form-horizontal" prependId="false">
+              <p:focus for="j_username"/>
+              <p:watermark for="j_username" value="username@ejemplo.com"/>
 
               <div style="margin-bottom: 25px" class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                <p:inputText  id="username" class="form-control" placeholder="Usuario o email" value="#{loginController.usuario.usuario}" required="true" requiredMessage="Por favor, ingrese su Usuario o Email"/>
-                <p:message for="username" />
+                <p:inputText id="j_username" class="form-control" value="#{loginController.usuario.username}"
+                             required="true" placeholder="Usuario o email"  requiredMessage="Usuario is required"
+                             validatorMessage="Por favor use un email válido">
+                  <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                </p:inputText>
+                <p:message for="j_username" />
               </div>
+
+
+
+
 
               <div style="margin-bottom: 25px" class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                <p:inputText id="password" class="form-control" type="password" placeholder="Contraseña" value="#{loginController.usuario.clave}" required="true" requiredMessage="Por favor, ingrese su Contraseña" title="Ingrese su contraseña"/>
+                <p:password id="j_password" class="form-control" value="#{loginController.usuario.password}" feedback="false" 
+                            placeholder="Contraseña" required="true" label="Password" requiredMessage="Password is required"
+                            validatorMessage="Password must be at least 7 characters" />
+                <p:message for="j_password"/>
               </div>
 
 
@@ -78,8 +92,7 @@
 
                 <div class="col-sm-12 controls" align="center">
                   <!--<a id="btn-login" href="#" class="btn btn-success">Iniciar sesión  </a>-->
-                  <p:commandButton update="growl" class="btn btn-success" action="#{loginController.validar}" value="Iniciar sesión" />
-                  
+                  <p:commandButton update="growl" class="btn btn-success" action="#{loginController.doLogin()}" value="Iniciar sesión" ajax="false"/>
                   <!--<a id="btn-fblogin" href="#" class="btn btn-primary">Login with Facebook</a>-->
                 </div>
               </div>
@@ -96,142 +109,11 @@
                   </div>
               </div>  -->  
             </h:form>
-
           </div>                     
         </div>  
       </div>
-
-      <!-- Registrarse -->
-      <div id="signupbox" style="display:none; margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-        <div class="panel panel-info">
-          <div class="panel-heading">
-            <div class="panel-title">Sign Up</div>
-            <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" onclick="$('#signupbox').hide();
-                $('#loginbox').show()">Sign In</a></div>
-          </div>  
-          <div class="panel-body" >
-            <form id="signupform" class="form-horizontal" role="form">
-
-              <div id="signupalert" style="display:none" class="alert alert-danger">
-                <p>Error:</p>
-                <span></span>
-              </div>
-
-
-
-              <div class="form-group">
-                <label for="email" class="col-md-3 control-label">Email</label>
-                <div class="col-md-9">
-                  <input type="text" class="form-control" name="email" placeholder="Email Address"/>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="firstname" class="col-md-3 control-label">First Name</label>
-                <div class="col-md-9">
-                  <input type="text" class="form-control" name="firstname" placeholder="First Name"/>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="lastname" class="col-md-3 control-label">Last Name</label>
-                <div class="col-md-9">
-                  <input type="text" class="form-control" name="lastname" placeholder="Last Name"/>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="password" class="col-md-3 control-label">Password</label>
-                <div class="col-md-9">
-                  <input type="password" class="form-control" name="passwd" placeholder="Password"/>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="icode" class="col-md-3 control-label">Invitation Code</label>
-                <div class="col-md-9">
-                  <input type="text" class="form-control" name="icode" placeholder=""/>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <!-- Button -->                                        
-                <div class="col-md-offset-3 col-md-9">
-                  <button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp; Sign Up</button>
-                  <span style="margin-left:8px;">or</span>  
-                </div>
-              </div>
-
-              <div style="border-top: 1px solid #999; padding-top:20px"  class="form-group">
-
-                <div class="col-md-offset-3 col-md-9">
-                  <button id="btn-fbsignup" type="button" class="btn btn-primary"><i class="icon-facebook"></i>   Sign Up with Facebook</button>
-                </div>                                           
-
-              </div>
-
-
-
-            </form>
-          </div>
-        </div>
-
-
-
-
-      </div> 
+      
     </div>
-
-
-
-    <!--
-    
-  <h:form id="loginForm">
-    <b:container ></b:container>
-    <b:container layout="fluid">
-      <b:panel title="login screen" look="primary">
-        <b:row>
-          <b:column medium-screen="2">
-            <h:outputText value="Username:" for="username" />
-          </b:column>
-          <b:column medium-screen="4">
-            <b:inputText placeholder="Username" required="true" id="username" value="#num;{loginBean.username}">
-              <f:facet name="prepend">
-                <b:icon name="user" />
-              </f:facet>
-            </b:inputText>
-          </b:column>
-          <b:column medium-screen="6">
-            <b:message for="username" />
-          </b:column>
-        </b:row>
-        <b:row>
-          <b:column medium-screen="2">
-            <h:outputText value="Password:" />
-          </b:column>
-          <b:column medium-screen="4">
-            <b:inputSecret placeholder="Password" id="password" value="#num;{loginBean.password}">
-              <f:facet name="prepend">
-                <b:iconAwesome name="key" />
-              </f:facet>
-            </b:inputSecret>
-          </b:column>
-          <b:column medium-screen="6">
-            <b:message for="password" />
-          </b:column>
-        </b:row>
-        <b:row>
-          <b:column span="2" offset="2">
-            <b:commandButton value="login" onclick="ajax:loginBean.login()" update="@form" look="primary"
-              style="width:100%" />
-          </b:column>
-          <b:column span="2">
-            <b:commandButton value="password forgotten" onclick="ajax:loginBean.forgotPassword()" update="@form"
-              look="danger" style="width:100%" />
-          </b:column>
-        </b:row>
-      </b:panel>
-    </b:container>
-  </h:form>-->
-
   </h:body>
 </html>
 

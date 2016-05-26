@@ -48,8 +48,6 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(name = "Cliente.findByCorreo", query = "SELECT c FROM Cliente c WHERE c.correo = :correo"),
   @NamedQuery(name = "Cliente.findByLugarNacimiento", query = "SELECT c FROM Cliente c WHERE c.lugarNacimiento = :lugarNacimiento"),
   @NamedQuery(name = "Cliente.findByFechaNacimiento", query = "SELECT c FROM Cliente c WHERE c.fechaNacimiento = :fechaNacimiento"),
-  @NamedQuery(name = "Cliente.findByReligion", query = "SELECT c FROM Cliente c WHERE c.religion = :religion"),
-  @NamedQuery(name = "Cliente.findByTipo", query = "SELECT c FROM Cliente c WHERE c.tipo = :tipo"),
   @NamedQuery(name = "Cliente.findByCategoria", query = "SELECT c FROM Cliente c WHERE c.categoria = :categoria"),
   @NamedQuery(name = "Cliente.findByFechaCreacion", query = "SELECT c FROM Cliente c WHERE c.fechaCreacion = :fechaCreacion")})
 public class Cliente implements Serializable {
@@ -97,12 +95,6 @@ public class Cliente implements Serializable {
   @Column(name = "fechaNacimiento")
   @Temporal(TemporalType.DATE)
   private Date fechaNacimiento;
-  @Size(max = 50)
-  @Column(name = "religion")
-  private String religion;
-  @Size(max = 10)
-  @Column(name = "tipo")
-  private String tipo;
   @Size(max = 10)
   @Column(name = "categoria")
   private String categoria;
@@ -139,7 +131,7 @@ public class Cliente implements Serializable {
     return nombre;
   }
   
-  public String getNombreCompleto() {
+  public String getNombreCompleto(){
     return nombre + " " + apelllido;
   }
 
@@ -233,22 +225,6 @@ public class Cliente implements Serializable {
 
   public void setFechaNacimiento(Date fechaNacimiento) {
     this.fechaNacimiento = fechaNacimiento;
-  }
-
-  public String getReligion() {
-    return religion;
-  }
-
-  public void setReligion(String religion) {
-    this.religion = religion;
-  }
-
-  public String getTipo() {
-    return tipo;
-  }
-
-  public void setTipo(String tipo) {
-    this.tipo = tipo;
   }
 
   public String getCategoria() {

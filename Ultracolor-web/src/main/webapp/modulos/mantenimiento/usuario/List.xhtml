@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-  <ui:composition template="/templates/templateCool.xhtml">
+  <ui:composition template="/template.xhtml">
 
 
     <ui:define name="title">
@@ -34,27 +34,27 @@
           </p:column>
           <p:column>
             <f:facet name="header">
-              <h:outputText value="#{bundle.ListUsuarioTitle_usuario}"/>
+              <h:outputText value="#{bundle.ListUsuarioTitle_username}"/>
             </f:facet>
-            <h:outputText value="#{item.usuario}"/>
+            <h:outputText value="#{item.username}"/>
           </p:column>
           <p:column>
             <f:facet name="header">
-              <h:outputText value="#{bundle.ListUsuarioTitle_clave}"/>
+              <h:outputText value="#{bundle.ListUsuarioTitle_password}"/>
             </f:facet>
-            <h:outputText value="#{item.clave}"/>
+            <h:outputText value="#{item.password}"/>
           </p:column>
           <p:column>
             <f:facet name="header">
-              <h:outputText value="#{bundle.ListUsuarioTitle_rol}"/>
+              <h:outputText value="#{bundle.ListUsuarioTitle_authority}"/>
             </f:facet>
-            <h:outputText value="#{item.rol}"/>
+            <h:outputText value="#{item.authority}"/>
           </p:column>
           <p:column>
             <f:facet name="header">
-              <h:outputText value="#{bundle.ListUsuarioTitle_estado}"/>
+              <h:outputText value="#{bundle.ListUsuarioTitle_enabled}"/>
             </f:facet>
-            <h:outputText value="#{item.estado}"/>
+            <p:selectBooleanCheckbox value="#{item.enabled}" disabled="true"/>
           </p:column>
           <p:column>
             <f:facet name="header">

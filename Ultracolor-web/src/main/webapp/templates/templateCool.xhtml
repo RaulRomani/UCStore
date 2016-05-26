@@ -37,9 +37,8 @@
 
     <title><ui:insert name="title">Ultracolor</ui:insert></title>
 
-    <f:event type="preRenderView" listener="#{loginController.checkSession()}" />
+    <!--<f:event type="preRenderView" listener="{loginController.checkSession()}" />-->
     <!--<f:viewAction action="{loginController.checkSession()}" /> -->
-
   </h:head>
 
   <h:body>
@@ -77,7 +76,7 @@
                 <a href="#"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
               </li> -->
 
-              <h:panelGroup rendered="#{loginController.usuario.rol.equals('ADMINISTRADOR')||loginController.usuario.rol.equals('VENDEDOR')}"> 
+              <h:panelGroup rendered="#{loginController.usuario.authority.equals('ROLE_ADMIN')||loginController.usuario.authority.equals('ROLE_SALER')}"> 
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
                      aria-expanded="false"><i class="fa fa-fw fa-shopping-cart "></i> Ventas <span class="caret"></span></a>
@@ -95,7 +94,7 @@
               </h:panelGroup>
 
 
-              <h:panelGroup rendered="#{loginController.usuario.rol.equals('ADMINISTRADOR')}"> 
+              <h:panelGroup rendered="#{loginController.usuario.authority.equals('ROLE_ADMIN')}"> 
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
                      aria-expanded="false"><i class="fa fa-fw fa-wrench  "></i> Mantenimiento <span class="caret"></span></a>
@@ -183,6 +182,9 @@
                     <p:commandLink actionListener="#{loginController.logout()}" ajax="false">
                       <i class="fa fa-fw fa-power-off"></i> Cerrar sesión
                     </p:commandLink>
+                  </li>
+                  <li>
+                    <h:outputLink value="#{request.contextPath}/j_spring_security_logout">Just log me out</h:outputLink>
                   </li>
 
                 </ul>

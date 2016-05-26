@@ -35,13 +35,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
   @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
   @NamedQuery(name = "Usuario.findByIdUsuario", query = "SELECT u FROM Usuario u WHERE u.idUsuario = :idUsuario"),
-  @NamedQuery(name = "Usuario.findByUsuario", query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario"),
-  @NamedQuery(name = "Usuario.findByClave", query = "SELECT u FROM Usuario u WHERE u.clave = :clave"),
-  @NamedQuery(name = "Usuario.findByRol", query = "SELECT u FROM Usuario u WHERE u.rol = :rol"),
-  @NamedQuery(name = "Usuario.findByEstado", query = "SELECT u FROM Usuario u WHERE u.estado = :estado"),
+  @NamedQuery(name = "Usuario.findByUsername", query = "SELECT u FROM Usuario u WHERE u.username = :username"),
+  @NamedQuery(name = "Usuario.findByPassword", query = "SELECT u FROM Usuario u WHERE u.password = :password"),
+  @NamedQuery(name = "Usuario.findByAuthority", query = "SELECT u FROM Usuario u WHERE u.authority = :authority"),
+  @NamedQuery(name = "Usuario.findByEnabled", query = "SELECT u FROM Usuario u WHERE u.enabled = :enabled"),
   @NamedQuery(name = "Usuario.findByNota", query = "SELECT u FROM Usuario u WHERE u.nota = :nota"),
-  @NamedQuery(name = "Usuario.validar", query = "SELECT u FROM Usuario u WHERE u.clave = :clave and u.usuario = :usuario")})
+  @NamedQuery(name = "Usuario.validar", query = "SELECT u FROM Usuario u WHERE u.password = :password and u.username = :username")})
 public class Usuario implements Serializable {
+
   private static final long serialVersionUID = 1L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,24 +51,21 @@ public class Usuario implements Serializable {
   private Integer idUsuario;
   @Basic(optional = false)
   @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "usuario")
-  private String usuario;
+  @Size(min = 1, max = 100)
+  @Column(name = "username")
+  private String username;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 128)
+  @Column(name = "password")
+  private String password;
   @Basic(optional = false)
   @NotNull
   @Size(min = 1, max = 50)
-  @Column(name = "clave")
-  private String clave;
-  @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "rol")
-  private String rol;
-  @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "estado")
-  private String estado;
+  @Column(name = "authority")
+  private String authority;
+  @Column(name = "enabled")
+  private Boolean enabled;
   @Size(max = 200)
   @Column(name = "nota")
   private String nota;
@@ -88,12 +86,11 @@ public class Usuario implements Serializable {
     this.idUsuario = idUsuario;
   }
 
-  public Usuario(Integer idUsuario, String usuario, String clave, String rol, String estado) {
+  public Usuario(Integer idUsuario, String username, String password, String authority) {
     this.idUsuario = idUsuario;
-    this.usuario = usuario;
-    this.clave = clave;
-    this.rol = rol;
-    this.estado = estado;
+    this.username = username;
+    this.password = password;
+    this.authority = authority;
   }
 
   public Integer getIdUsuario() {
@@ -104,36 +101,36 @@ public class Usuario implements Serializable {
     this.idUsuario = idUsuario;
   }
 
-  public String getUsuario() {
-    return usuario;
+  public String getUsername() {
+    return username;
   }
 
-  public void setUsuario(String usuario) {
-    this.usuario = usuario;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
-  public String getClave() {
-    return clave;
+  public String getPassword() {
+    return password;
   }
 
-  public void setClave(String clave) {
-    this.clave = clave;
+  public void setPassword(String password) {
+    this.password = password;
   }
 
-  public String getRol() {
-    return rol;
+  public String getAuthority() {
+    return authority;
   }
 
-  public void setRol(String rol) {
-    this.rol = rol;
+  public void setAuthority(String authority) {
+    this.authority = authority;
   }
 
-  public String getEstado() {
-    return estado;
+  public Boolean getEnabled() {
+    return enabled;
   }
 
-  public void setEstado(String estado) {
-    this.estado = estado;
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
   }
 
   public String getNota() {
@@ -203,5 +200,5 @@ public class Usuario implements Serializable {
   public String toString() {
     return "com.ultracolor.entities.Usuario[ idUsuario=" + idUsuario + " ]";
   }
-  
+
 }

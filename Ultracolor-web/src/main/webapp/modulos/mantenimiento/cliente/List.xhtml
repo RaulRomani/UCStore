@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-  <ui:composition template="/templates/templateCool.xhtml">
+  <ui:composition template="/template.xhtml">
 
 
     <ui:define name="title">
@@ -105,18 +105,6 @@
             <h:outputText value="#{item.fechaNacimiento}">
               <f:convertDateTime pattern="MM/dd/yyyy" />
             </h:outputText>
-          </p:column>
-          <p:column>
-            <f:facet name="header">
-              <h:outputText value="#{bundle.ListClienteTitle_religion}"/>
-            </f:facet>
-            <h:outputText value="#{item.religion}"/>
-          </p:column>
-          <p:column>
-            <f:facet name="header">
-              <h:outputText value="#{bundle.ListClienteTitle_tipo}"/>
-            </f:facet>
-            <h:outputText value="#{item.tipo}"/>
           </p:column>
           <p:column>
             <f:facet name="header">

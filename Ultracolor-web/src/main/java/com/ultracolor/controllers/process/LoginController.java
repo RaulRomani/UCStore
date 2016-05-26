@@ -7,6 +7,7 @@ package com.ultracolor.controllers.process;
 
 import com.ultracolor.controllers.util.JsfUtil;
 import com.ultracolor.controllers.util.Log4jConfig;
+import static com.ultracolor.controllers.util.ShaHashGeneratorApp.sha512;
 import com.ultracolor.entities.Personal;
 import com.ultracolor.entities.Usuario;
 import com.ultracolor.facades.PersonalFacadeLocal;
@@ -31,7 +32,15 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -57,7 +66,12 @@ public class LoginController implements Serializable {
   private StreamedContent image;
   private String pathImage;
 
-  final static Logger logger = Log4jConfig.getLogger(LoginController.class.getName());
+  /*
+   * Note that @SuppressWarnings is only used by a source code analyzer
+   * that I use caled "FindBugs". You don't need this unless you do to.
+   */
+  @SuppressWarnings("SE_TRANSIENT_FIELD_NOT_RESTORED")
+  private transient final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
   @PostConstruct
   private void init() {
@@ -73,17 +87,59 @@ public class LoginController implements Serializable {
     logger.info("Project stage : " + projectStage);
   }
 
+  /**
+   * @return @throws IOException
+   * @throws ServletException
+   */
+  public String doLogin() throws IOException, ServletException {
+    logger.debug("**** Executing doLogin method of LoginBean...");
+    ExternalContext context = FacesContext.getCurrentInstance()
+            .getExternalContext();
+
+    RequestDispatcher dispatcher = ((ServletRequest) context.getRequest())
+            .getRequestDispatcher("/j_spring_security_check?j_username=" + usuario.getUsername()
+                    + "&j_password=" + usuario.getPassword());
+    
+    logger.info("Login -  usuario : " + usuario.getUsername() + " password : " + usuario.getPassword());
+    
+    String username = usuario.getUsername();
+    String password = usuario.getPassword();
+    Usuario u = ejbFacadeUsuario.validar( username, sha512(password,username) );
+    
+    if (u != null) {
+      usuario = u;
+      personal = usuario.getIdPersonal();
+
+      //creamos una sesion jsf usuario
+      FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", u);
+
+      RequestContext.getCurrentInstance().update("growl");
+      FacesContext fafesContext = FacesContext.getCurrentInstance();
+      fafesContext.getExternalContext().getFlash().setKeepMessages(true);
+      JsfUtil.addSuccessMessage("Bienvenido " + personal.getNombre() + " " + personal.getApellido());
+    }
+    
+
+    // Forwards to original destination or to error page
+    dispatcher.forward((ServletRequest) context.getRequest(),
+            (ServletResponse) context.getResponse());
+    FacesContext.getCurrentInstance().responseComplete();
+
+    // It's OK to return null here because Faces is just going to exit.
+    return null;
+  }
+
   public void checkSession() {
 
     FacesContext context = FacesContext.getCurrentInstance();
 
     Usuario u = (Usuario) context.getExternalContext().getSessionMap().get("user");
     if (u == null) {
-      
+
       RequestContext.getCurrentInstance().update("growl");
       context.getExternalContext().getFlash().setKeepMessages(true);
-      context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", "No ha iniciado sesión"));
-      
+      context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No ha iniciado sesión"));
+
       context.getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "/login?faces-redirect=true");
       logger.info("exito -- seguridad de sesión"); // Anybody can watch a page without a session
     } else {
@@ -93,7 +149,7 @@ public class LoginController implements Serializable {
 
   public String validar() {
 
-    Usuario u = ejbFacadeUsuario.validar(usuario.getUsuario(), usuario.getClave());
+    Usuario u = ejbFacadeUsuario.validar(usuario.getUsername(), usuario.getPassword());
     if (u != null) {
       usuario = u;
       personal = usuario.getIdPersonal();
@@ -111,7 +167,7 @@ public class LoginController implements Serializable {
       RequestContext.getCurrentInstance().update("growl");
       FacesContext context = FacesContext.getCurrentInstance();
       context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario o contraseña es invalido"));
-      
+
       return "";
     }
   }
@@ -173,15 +229,17 @@ public class LoginController implements Serializable {
   }
 
   public StreamedContent getImage() {
-    
+
     File foto = new File(pathImage + usuario.getIdUsuario() + ".jpg");
-    if(foto.exists() && ! foto.isDirectory()) {
+    if (foto.exists() && !foto.isDirectory()) {
       try {
         FileInputStream stream = new FileInputStream(foto);
         image = new DefaultStreamedContent(stream, "image/jpg");
-      } catch (FileNotFoundException ex) { ex.printStackTrace();}
+      } catch (FileNotFoundException ex) {
+        ex.printStackTrace();
+      }
     } else { // cargar photo por defecto
-      
+
     }
     return image;
   }
@@ -232,8 +290,6 @@ public class LoginController implements Serializable {
   public void setUsuario(Usuario usuario) {
     this.usuario = usuario;
   }
-  
-  
 
   public UploadedFile getFile() {
     return file;

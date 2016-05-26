@@ -64,6 +64,12 @@
                                update=":DatosCarrito" ajax="true">
                 <!--<p:resetInput target=":DatosCarrito:diente" />-->
               </p:commandButton>
+              <p:commandButton id="crearCliente" icon="ui-icon-plus"
+                                   actionListener="#{clienteController.prepareCreate}"
+                                   value="Nuevo Cliente"
+                                   update=":ClienteCreateForm"
+                                   oncomplete="PF('ClienteCreateDialog').show()"/>
+              
             </f:facet>
           </p:dataTable>
 

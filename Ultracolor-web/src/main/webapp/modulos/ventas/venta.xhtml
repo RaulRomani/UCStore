@@ -8,6 +8,12 @@
 
 
   <ui:composition template="/templates/templateCool.xhtml">
+
+    <ui:define name="resources">
+      <h:outputScript name="/js/crud.js"/>
+    </ui:define>
+
+
     <ui:define name="body">
 
       <div class="container">
@@ -25,7 +31,14 @@
                   <p:commandButton id="buscarCliente" icon="ui-icon-search"   
                                    value="Buscar Cliente"
                                    oncomplete="PF('ClienteSearchDialog').show()"/>
+
+                  <p:commandButton id="crearCliente" icon="ui-icon-plus"
+                                   actionListener="#{clienteController.prepareCreate}"
+                                   value="Nuevo Cliente"
+                                   update=":ClienteCreateForm"
+                                   oncomplete="PF('ClienteCreateDialog').show()"/>
                 </div>
+
               </div>
 
               <h:panelGroup id="cliente" rendered="#{ventas.clienteSelected!=null}">
@@ -79,7 +92,9 @@
             </div>
           </h:form>
 
-          <h:form id="CarritoListForm" onkeypress="if (event.keyCode == 13) { return false; }">
+          <h:form id="CarritoListForm" onkeypress="if (event.keyCode == 13) {
+                return false;
+              }">
             <div class="col-xs-9 ventas-right">
 
               <p:dataTable id="datalist" value="#{ventas.carrito.items}" var="item" emptyMessage="">
@@ -126,7 +141,7 @@
                   </p:confirmDialog>
                 </p:column>
               </p:dataTable>
-              
+
               <h:message for="cantidad" style="color:red" />
               <h:panelGroup id="total">
                 <div class="row total">
@@ -261,6 +276,7 @@
 
       <ui:include src="ventaBuscarCliente.xhtml"/>
       <ui:include src="ventaBuscarProducto.xhtml"/>
+      <ui:include src="ventaNuevoCliente.xhtml"/>
     </ui:define>
   </ui:composition>
 </html>

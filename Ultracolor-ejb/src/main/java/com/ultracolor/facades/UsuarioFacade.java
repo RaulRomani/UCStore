@@ -38,8 +38,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     
     Query q = getEntityManager().createNamedQuery("Usuario.validar");
     
-    q.setParameter("usuario", u);
-    q.setParameter("clave", p);
+    q.setParameter("username", u);
+    q.setParameter("password", p);
     
     try {
       usuario = (Usuario) q.getSingleResult();

@@ -28,10 +28,6 @@
             <p:inputText id="celular" value="#{clienteController.selected.celular}" title="#{bundle.CreateClienteTitle_celular}" />
             <p:outputLabel value="#{bundle.CreateClienteLabel_telefono}" for="telefono" />
             <p:inputText id="telefono" value="#{clienteController.selected.telefono}" title="#{bundle.CreateClienteTitle_telefono}" />
-            <p:outputLabel value="#{bundle.CreateClienteLabel_sexo}" for="sexo" />
-            <p:inputText id="sexo" value="#{clienteController.selected.sexo}" title="#{bundle.CreateClienteTitle_sexo}" />
-            <p:outputLabel value="#{bundle.CreateClienteLabel_edad}" for="edad" />
-            <p:inputText id="edad" value="#{clienteController.selected.edad}" title="#{bundle.CreateClienteTitle_edad}" />
             <p:outputLabel value="#{bundle.CreateClienteLabel_correo}" for="correo" />
             <p:inputText id="correo" value="#{clienteController.selected.correo}" title="#{bundle.CreateClienteTitle_correo}" />
             <p:outputLabel value="#{bundle.CreateClienteLabel_lugarNacimiento}" for="lugarNacimiento" />
@@ -43,7 +39,8 @@
             <p:outputLabel value="#{bundle.CreateClienteLabel_fechaCreacion}" for="fechaCreacion" />
             <p:calendar id="fechaCreacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{clienteController.selected.fechaCreacion}" title="#{bundle.EditClienteTitle_fechaCreacion}" required="true" requiredMessage="#{bundle.EditClienteRequiredMessage_fechaCreacion}" showOn="button"/>
           </p:panelGrid>
-          <p:commandButton actionListener="#{clienteController.create}" value="#{bundle.Save}" update="display,:ClienteListForm:datalist,:growl" oncomplete="handleSubmit(args,'ClienteCreateDialog');"/>
+          <p:commandButton actionListener="#{clienteController.create}" value="#{bundle.Save}" update="display,:growl" oncomplete="handleSubmit(args,'ClienteCreateDialog');"/>
+          
           <p:commandButton value="#{bundle.Cancel}" onclick="ClienteCreateDialog.hide()"/>
         </h:panelGroup>
       </h:form>

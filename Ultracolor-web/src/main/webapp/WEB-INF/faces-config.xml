@@ -9,4 +9,9 @@
             <var>bundle</var>
         </resource-bundle>
     </application>
+    
+    <!-- for spring security -->
+    <lifecycle>
+        <phase-listener>com.ultracolor.controllers.util.LoginErrorPhaseListener</phase-listener>
+    </lifecycle>
 </faces-config>

@@ -93,7 +93,7 @@ public class Ventas implements Serializable {
     carrito.setComprobante("BOLETA");
     credito.setInicial(BigDecimal.ZERO);
     credito.setPlazo("MENSUAL");
-    
+
   }
 
   public void agregarProducto() {
@@ -118,19 +118,19 @@ public class Ventas implements Serializable {
       logger.info("ERROR AL AGREGAR SERVICIO");
     }
   }
-  
-  public void eliminarProducto(CarritoItem carritoItem){
+
+  public void eliminarProducto(CarritoItem carritoItem) {
     int index = carrito.getItems().indexOf(carritoItem);
     carrito.getItems().remove(index);
     JsfUtil.addErrorMessage("El producto se eliminó correctamente.");
     logger.info("Eliminar producto OK");
   }
-  
-  public void handleChangeCantidad(CarritoItem carritoItem){
+
+  public void handleChangeCantidad(CarritoItem carritoItem) {
     int index = carrito.getItems().indexOf(carritoItem);
     Integer cantidad = carrito.getItems().get(index).getCantidad();
     BigDecimal precio = carrito.getItems().get(index).getPrecioProducto();
-    carrito.getItems().get(index).setImporte(precio.multiply( new BigDecimal(cantidad)));
+    carrito.getItems().get(index).setImporte(precio.multiply(new BigDecimal(cantidad)));
   }
 
   public void grabarVentaContado() throws JRException, IOException, NamingException, SQLException, Exception {
@@ -151,11 +151,10 @@ public class Ventas implements Serializable {
     JsfUtil.addSuccessMessage("La venta en cuotas se realizo correctamente.");
     logger.info("SE AGREGO UNA VENTA EN CUOTAS");
   }
-  
-  public void imprimirProforma() throws JRException, IOException{
-    
+
+  public void imprimirProforma() throws JRException, IOException {
+
     //JRBeanCollectionDataSource beanCarritoItems = new JRBeanCollectionDataSource(carrito.getItems());
-    
     Map<String, Object> parametro = new HashMap<>();
     parametro.put("carrito", carrito.getItems());
     parametro.put("cliente_nombre", clienteSelected.getNombreCompleto());
@@ -173,19 +172,19 @@ public class Ventas implements Serializable {
 
     HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
     //response.addHeader("Content-disposition", "attachment; filename=ProgramacionTutores.pdf");
-    response.addHeader("Content-disposition", "filename=Proforma-"+clienteSelected.getDni()+ ".pdf");  //Works in chrome
+    response.addHeader("Content-disposition", "filename=Proforma-" + clienteSelected.getDni() + ".pdf");  //Works in chrome
     try (ServletOutputStream stream = response.getOutputStream()) {
       JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
       //JasperExportManager.exportReportToPdfFile(jasperPrint, "D://clientes.pdf");
       JasperPrintManager.printReport(jasperPrint, false);
-      
+
       stream.flush();
     }
 
     FacesContext.getCurrentInstance().responseComplete();
-  
+
   }
-  
+
   public void reporteVentaContado(Integer idVenta) throws JRException, IOException, NamingException, SQLException, Exception {
 
     Map<String, Object> parametro = new HashMap<>();
@@ -205,19 +204,19 @@ public class Ventas implements Serializable {
 
     HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
     //response.addHeader("Content-disposition", "attachment; filename=ProgramacionTutores.pdf");
-    response.addHeader("Content-disposition", "filename=Comprobante-"+clienteSelected.getDni()+ ".pdf");  //Works in chrome
+    response.addHeader("Content-disposition", "filename=Comprobante-" + clienteSelected.getDni() + ".pdf");  //Works in chrome
     ServletOutputStream stream = response.getOutputStream();
 
     JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
     //JasperExportManager.exportReportToPdfFile(jasperPrint, "D://clientes.pdf");
     JasperPrintManager.printReport(jasperPrint, false);
-    
+
     stream.flush();
     stream.close();
 
     FacesContext.getCurrentInstance().responseComplete();
   }
-  
+
   public void reporteVentaCreditos(Integer idVenta) throws JRException, IOException, NamingException, SQLException, Exception {
 
     Map<String, Object> parametro = new HashMap<>();
@@ -233,12 +232,12 @@ public class Ventas implements Serializable {
 
     HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
     //response.addHeader("Content-disposition", "attachment; filename=ProgramacionTutores.pdf");  //se descarga solo
-    response.addHeader("Content-disposition", "filename=Credito-"+clienteSelected.getDni()+ ".pdf");  //Works in chrome
+    response.addHeader("Content-disposition", "filename=Credito-" + clienteSelected.getDni() + ".pdf");  //Works in chrome
     ServletOutputStream stream = response.getOutputStream();
 
     JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
     JasperPrintManager.printReport(jasperPrint, false);
-    
+
     stream.flush();
     stream.close();
 
@@ -259,9 +258,9 @@ public class Ventas implements Serializable {
   }
 
   public List<Cliente> getClienteList() {
-    if (clienteList == null) {
-      clienteList = ejbFacadeCliente.findAll();
-    }
+//    if (clienteList == null) {
+    clienteList = ejbFacadeCliente.findAll();
+//    }
     return clienteList;
   }
 
