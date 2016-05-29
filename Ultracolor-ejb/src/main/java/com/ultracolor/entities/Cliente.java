@@ -99,7 +99,6 @@ public class Cliente implements Serializable {
   @Column(name = "categoria")
   private String categoria;
   @Basic(optional = false)
-  @NotNull
   @Column(name = "fechaCreacion")
   @Temporal(TemporalType.TIMESTAMP)
   private Date fechaCreacion;
@@ -132,6 +131,8 @@ public class Cliente implements Serializable {
   }
   
   public String getNombreCompleto(){
+    if(apelllido==null)
+      return nombre;
     return nombre + " " + apelllido;
   }
 

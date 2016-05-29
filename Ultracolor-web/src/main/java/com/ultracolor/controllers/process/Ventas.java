@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ultracolor.controllers.process;
 
 import com.ultracolor.controllers.util.AccesoDB;
@@ -13,6 +8,7 @@ import com.ultracolor.entities.Credito;
 import com.ultracolor.entities.Cliente;
 import com.ultracolor.entities.Producto;
 import com.ultracolor.entities.Productoventa;
+import com.ultracolor.entities.Venta;
 import com.ultracolor.entities.util.Carrito;
 import com.ultracolor.entities.util.CarritoItem;
 import java.io.File;
@@ -41,6 +37,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import org.apache.log4j.Logger;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -72,7 +69,7 @@ public class Ventas implements Serializable {
   private LoginController personal;
 
   private List<Cliente> clienteList;
-  private Cliente clienteSelected = null;
+  private Cliente clienteSelected;
 
   private List<Producto> productoList;
   private Producto productoSelected = null;
@@ -81,6 +78,10 @@ public class Ventas implements Serializable {
   private Credito credito;
 
   private Carrito carrito;
+
+  private Venta venta;
+  private boolean comprobanteCredito;
+  private String tipoCliente;
 
   final static Logger logger = Log4jConfig.getLogger(Ventas.class.getName());
 
@@ -93,11 +94,14 @@ public class Ventas implements Serializable {
     carrito.setComprobante("BOLETA");
     credito.setInicial(BigDecimal.ZERO);
     credito.setPlazo("MENSUAL");
+    tipoCliente = "REGISTRADO";
+    clienteSelected = new Cliente();
+    venta = new Venta();
 
   }
 
   public void agregarProducto() {
-    if (productoSelected != null && clienteSelected != null) {
+    if (productoSelected != null) {
       BigDecimal precio = productoSelected.getPrecioVenta();
       Integer cantidad = 1;
       BigDecimal importe = precio.multiply(new BigDecimal(cantidad));
@@ -114,8 +118,7 @@ public class Ventas implements Serializable {
       carrito.add(item);
       logger.info("Producto agregado cantidad: " + carrito.getItems().size());
     } else {
-      JsfUtil.addErrorMessage("Primero agregar un Cliente y un Producto.");
-      logger.info("ERROR AL AGREGAR SERVICIO");
+      JsfUtil.addErrorMessage("Primero elige un Producto.");
     }
   }
 
@@ -136,52 +139,81 @@ public class Ventas implements Serializable {
   public void grabarVentaContado() throws JRException, IOException, NamingException, SQLException, Exception {
 
     Integer idVenta;
-    idVenta = ejbFacadeVenta.grabarVentaContado(carrito, clienteSelected, personal.getUsuario());
-    reporteVentaContado(idVenta);
-    JsfUtil.addSuccessMessage("La venta al contado se realizo correctamente.");
-    logger.info("SE AGREGO UNA VENTA Y SU DETALLE");
+    if (!carrito.getItems().isEmpty()) {
+      idVenta = ejbFacadeVenta.grabarVentaContado(carrito, clienteSelected, personal.getUsuario());
+      reporteVentaContado(idVenta);
+      JsfUtil.addSuccessMessage("La venta al contado se realizo correctamente.");
+      logger.info("SE AGREGO UNA VENTA Y SU DETALLE");
+    } else {
+      JsfUtil.addErrorMessage("Primero agregue productos");
+    }
 
   }
-
+  
   public void grabarVentaCreditos() throws JRException, IOException, NamingException, SQLException, Exception {
 
     Integer idVenta;
-    idVenta = ejbFacadeVenta.grabarVentaCreditos(carrito, clienteSelected, personal.getUsuario(), credito);
-    reporteVentaCreditos(idVenta);
-    JsfUtil.addSuccessMessage("La venta en cuotas se realizo correctamente.");
-    logger.info("SE AGREGO UNA VENTA EN CUOTAS");
+    if (clienteSelected.getIdCliente()!=null) {
+      if (!carrito.getItems().isEmpty()) {
+        if (credito.getTotalcuotas() != 0) {
+        idVenta = ejbFacadeVenta.grabarVentaCreditos(carrito, clienteSelected, personal.getUsuario(), credito);
+        reporteVentaCreditos(idVenta);
+        venta.setIdVenta(idVenta);
+
+        JsfUtil.addSuccessMessage("La venta en cuotas se realizo correctamente.");
+        logger.info("SE AGREGO UNA VENTA EN CUOTAS");
+        } else {
+        JsfUtil.addErrorMessage("Ingreso un numero de cuotas");
+      }
+      } else {
+        JsfUtil.addErrorMessage("Agregue productos");
+      }
+    } else {
+      JsfUtil.addErrorMessage("Seleccione un cliente registrado");
+    }
+  }
+  
+  public void imprimirComprobanteCredito() throws IOException, NamingException, SQLException, Exception{
+    Integer idVenta = venta.getIdVenta();
+    reporteVentaContado(idVenta);
+    logger.info("comprobante IMPRESO OK");
+    //JsfUtil.addSuccessMessage("Primero registre un cliente");
   }
 
   public void imprimirProforma() throws JRException, IOException {
 
     //JRBeanCollectionDataSource beanCarritoItems = new JRBeanCollectionDataSource(carrito.getItems());
-    Map<String, Object> parametro = new HashMap<>();
-    parametro.put("carrito", carrito.getItems());
-    parametro.put("cliente_nombre", clienteSelected.getNombreCompleto());
-    parametro.put("cliente_direccion", clienteSelected.getDireccion());
-    parametro.put("cliente_DNI", clienteSelected.getDni());
-    float total = Float.parseFloat(carrito.getTotal().toString());
-    parametro.put("total", CantidadLetras.convertNumberToLetter(total));
+    if (!carrito.getItems().isEmpty()) {
+      Map<String, Object> parametro = new HashMap<>();
+      parametro.put("carrito", carrito.getItems());
+      parametro.put("cliente_nombre", clienteSelected.getNombreCompleto());
+      parametro.put("cliente_direccion", clienteSelected.getDireccion());
+      parametro.put("cliente_DNI", clienteSelected.getDni());
+      float total = Float.parseFloat(carrito.getTotal().toString());
+      parametro.put("total", CantidadLetras.convertNumberToLetter(total));
 
-    File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/reportes/ventas/proforma.jasper"));
-    logger.info("OK PROFORMA REPORT ");
+      File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/reportes/ventas/proforma.jasper"));
+      logger.info("OK PROFORMA REPORT ");
 
-    //Connection con = AccesoDB.getConnection();
-    //java.sql.Connection co = em.unwrap(java.sql.Connection.class);
-    JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametro, new JREmptyDataSource());
+      //Connection con = AccesoDB.getConnection();
+      //java.sql.Connection co = em.unwrap(java.sql.Connection.class);
+      JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametro, new JREmptyDataSource());
 
-    HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-    //response.addHeader("Content-disposition", "attachment; filename=ProgramacionTutores.pdf");
-    response.addHeader("Content-disposition", "filename=Proforma-" + clienteSelected.getDni() + ".pdf");  //Works in chrome
-    try (ServletOutputStream stream = response.getOutputStream()) {
-      JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-      //JasperExportManager.exportReportToPdfFile(jasperPrint, "D://clientes.pdf");
-      JasperPrintManager.printReport(jasperPrint, false);
+      HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+      response.addHeader("Content-disposition", "attachment; filename=Proforma-" + clienteSelected.getDni() + ".pdf");  //Works in chrome
+      try (ServletOutputStream stream = response.getOutputStream()) {
+        JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+        //JasperExportManager.exportReportToPdfFile(jasperPrint, "D://clientes.pdf");
+        JasperPrintManager.printReport(jasperPrint, false);
 
-      stream.flush();
+        stream.flush();
+      }
+
+      FacesContext.getCurrentInstance().responseComplete();
+
+    } else {
+      JsfUtil.addErrorMessage("Primero agregue productos");
     }
-
-    FacesContext.getCurrentInstance().responseComplete();
 
   }
 
@@ -192,6 +224,7 @@ public class Ventas implements Serializable {
     parametro.put("cliente_nombre", clienteSelected.getNombreCompleto());
     parametro.put("cliente_direccion", clienteSelected.getDireccion());
     parametro.put("cliente_DNI", clienteSelected.getDni());
+    parametro.put("comprobante", carrito.getComprobante());
     float total = Float.parseFloat(carrito.getTotal().toString());
     parametro.put("total", CantidadLetras.convertNumberToLetter(total));
 
@@ -203,8 +236,7 @@ public class Ventas implements Serializable {
     JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametro, con);
 
     HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-    //response.addHeader("Content-disposition", "attachment; filename=ProgramacionTutores.pdf");
-    response.addHeader("Content-disposition", "filename=Comprobante-" + clienteSelected.getDni() + ".pdf");  //Works in chrome
+    response.addHeader("Content-disposition", "attachment; filename=Comprobante-" + clienteSelected.getDni() + ".pdf");  //Works in chrome
     ServletOutputStream stream = response.getOutputStream();
 
     JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
@@ -264,6 +296,20 @@ public class Ventas implements Serializable {
     return clienteList;
   }
 
+  public void prepareCliente() {
+    clienteSelected = new Cliente();
+    //RequestContext.getCurrentInstance().reset("ClienteSearchForm:noregistrado");
+  }
+
+  public void registrarCliente() {
+    if (!clienteSelected.getDni().isEmpty() && !clienteSelected.getNombre().isEmpty()) {
+      ejbFacadeCliente.create(clienteSelected);
+      //clienteSelected = ejbFacadeCliente.find(this);
+      JsfUtil.addSuccessMessage("Cliente registrado exitosamente!");
+    }
+
+  }
+
   public Cliente getClienteSelected() {
     return clienteSelected;
   }
@@ -277,9 +323,9 @@ public class Ventas implements Serializable {
   }
 
   public List<Producto> getProductoList() {
-    if (productoList == null) {
-      productoList = ejbFacadeProducto.findAll();
-    }
+//    if (productoList == null) {
+    productoList = ejbFacadeProducto.findAll();
+//    }
     return productoList;
   }
 
@@ -313,6 +359,22 @@ public class Ventas implements Serializable {
 
   public void setCredito(Credito credito) {
     this.credito = credito;
+  }
+
+  public boolean isComprobanteCredito() {
+    return comprobanteCredito;
+  }
+
+  public void setComprobanteCredito(boolean comprobanteCredito) {
+    this.comprobanteCredito = comprobanteCredito;
+  }
+
+  public String getTipoCliente() {
+    return tipoCliente;
+  }
+
+  public void setTipoCliente(String tipoCliente) {
+    this.tipoCliente = tipoCliente;
   }
 
 }

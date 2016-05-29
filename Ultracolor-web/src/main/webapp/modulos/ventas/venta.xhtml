@@ -28,20 +28,15 @@
                   <!--<p:outputLabel class="form-control-label"  value="Cliente" for="buscarCliente" />-->
                 </div>
                 <div class="col-sm-9">
-                  <p:commandButton id="buscarCliente" icon="ui-icon-search"   
+                  <p:commandButton actionListener="#{ventas.prepareCliente()}"
+                                   id="buscarCliente" icon="ui-icon-search"   
                                    value="Buscar Cliente"
+                                   update=":ClienteSearchForm:noregistrado"
                                    oncomplete="PF('ClienteSearchDialog').show()"/>
-
-                  <p:commandButton id="crearCliente" icon="ui-icon-plus"
-                                   actionListener="#{clienteController.prepareCreate}"
-                                   value="Nuevo Cliente"
-                                   update=":ClienteCreateForm"
-                                   oncomplete="PF('ClienteCreateDialog').show()"/>
                 </div>
-
               </div>
 
-              <h:panelGroup id="cliente" rendered="#{ventas.clienteSelected!=null}">
+              <h:panelGroup id="cliente" rendered="#{ventas.clienteSelected.nombre!=null}">
                 <div class="form-group row">
                   <div class="col-sm-3">
                     <p:outputLabel class="form-control-label"  value="Cliente" />
@@ -50,8 +45,16 @@
                     <h:outputText value="#{ventas.clienteSelected.nombreCompleto}"/>
                   </div>
                 </div>
-              </h:panelGroup>
 
+                <div class="form-group row">
+                  <div class="col-sm-3">
+                    <p:outputLabel class="form-control-label"  value="Id" />
+                  </div>
+                  <div class="col-sm-9">
+                    <h:outputText value="#{ventas.clienteSelected.idCliente}"/>
+                  </div>
+                </div>
+              </h:panelGroup>
 
 
 
@@ -215,6 +218,7 @@
                                        value="#{ventas.credito.totalcuotas}"
                                        rendered="true"
                                        requiredMessage='El campo "Nº de cuotas" es requerido'>
+                           <f:validateLongRange minimum="1" maximum="100"/>
                             <p:ajax event="keyup" listener="#{ventas.calcularImporte()}" update="importe" 
                                     delay="300"
                                     process="@this inicial"/>  
@@ -238,7 +242,7 @@
                       </div>
 
                       <div class="form-group row">
-                        <p:outputLabel class="col-sm-3 form-control-label" for="tiempo" value="Tiempo" />
+                        <p:outputLabel class="col-sm-3 form-control-label" for="tiempo" value="Plazo" />
                         <div class="col-sm-9">
                           <p:selectOneRadio id="tiempo" value="#{ventas.credito.plazo}">
                             <f:selectItem itemLabel="Mensual"
@@ -249,10 +253,57 @@
                         </div>
                       </div>
 
-                      <p:commandButton value="Guardar venta" actionListener="#{ventas.grabarVentaCreditos()}"
-                                       icon="fa fa-save"
-                                       update=":growl" ajax="false"/>
+                      <div class="form-group row">
+                        <div class="col-sm-3"/>
+                        <div class="col-sm-9">
+                          <p:commandButton value="Guardar venta" actionListener="#{ventas.grabarVentaCreditos()}"
+                                           icon="fa fa-save"
+                                           update=":growl" ajax="false"/>
+                        </div>
+                      </div>
 
+
+
+                      <div class="form-group row">
+                        <p:outputLabel class="col-sm-5 form-control-label" for="comprobante-credito" value="Comprobante" />
+                        <div class="col-sm-7">
+                          <p:inputSwitch value="#{ventas.comprobanteCredito}" id="comprobante-credito" onLabel="SI" offLabel="NO">
+                            <p:ajax update="acciones" />
+                          </p:inputSwitch>
+                        </div>
+                      </div>
+
+                      <h:panelGroup id="acciones">
+                        <h:panelGroup rendered="#{ventas.comprobanteCredito==true}">
+                          <div class="form-group row">
+                            <div class="col-sm-5">
+
+                            </div>
+                            <div class="col-sm-7">
+                              <p:selectOneRadio id="comprobante-credito2" 
+                                                value="#{ventas.carrito.comprobante}"
+                                                rendered="#{ventas.comprobanteCredito==true}"
+                                                required="true" requiredMessage="#{bundle.CreateVentaRequiredMessage_comprobante}"
+                                                >
+                                <f:selectItem itemLabel="Boleta" itemValue="BOLETA" />
+                                <f:selectItem itemLabel="Factura" itemValue="FACTURA" />
+                              </p:selectOneRadio>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-sm-5"/>
+                            <div class="col-sm-7">
+                              <p:commandButton value="Imprimir" actionListener="#{ventas.imprimirComprobanteCredito}"
+                                               icon="fa fa-print"
+                                               update=":growl" ajax="false"/>
+                            </div>
+                          </div>
+
+
+
+                        </h:panelGroup>
+                      </h:panelGroup>
                     </p:tab>
 
 

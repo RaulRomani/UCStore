@@ -179,14 +179,10 @@
                   </li>
                   <li class="divider"></li>
                   <li>
-                    <p:commandLink actionListener="#{loginController.logout()}" ajax="false">
+                    <h:outputLink value="#{request.contextPath}/j_spring_security_logout">
                       <i class="fa fa-fw fa-power-off"></i> Cerrar sesión
-                    </p:commandLink>
+                    </h:outputLink>
                   </li>
-                  <li>
-                    <h:outputLink value="#{request.contextPath}/j_spring_security_logout">Just log me out</h:outputLink>
-                  </li>
-
                 </ul>
               </li>
             </ul>

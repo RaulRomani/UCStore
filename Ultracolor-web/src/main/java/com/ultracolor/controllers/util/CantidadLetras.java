@@ -141,7 +141,7 @@ public class CantidadLetras {
     } else {
       converted.append(splitNumber[1]).append("/100 ");
     }
-    converted.append("Nuevos Soles");
+    converted.append("Soles");
     return converted.toString();
   }
 

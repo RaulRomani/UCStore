@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -34,6 +35,9 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
 
   @PersistenceContext(unitName = "com.ultracolor_Ultracolor-ejb_ejb_1.0PU")
   private EntityManager em;
+
+  @EJB
+  private com.ultracolor.facades.ProductoFacadeLocal ejbFacadeProducto;
 
   @Override
   protected EntityManager getEntityManager() {
@@ -54,7 +58,8 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
     venta.setDescuento(BigDecimal.ZERO);
     venta.setSubtotal(carrito.getTotal());
     venta.setTotal(carrito.getTotal());
-    venta.setIdCliente(cliente);
+    if(cliente.getIdCliente() != null) // si es cliente registrado
+      venta.setIdCliente(cliente);
     venta.setIdUsuario(usuario);
     venta.setEstado("CANCELADO");
 
@@ -76,6 +81,18 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
         //productoVenta.setProductoventaPK(new ProductoventaPK(venta.getIdVenta(), i.getIdProducto()));
         productoVentaList.add(productoVenta);
 
+        // Stock
+        Producto producto = ejbFacadeProducto.find(i.getIdProducto());
+        
+        if(producto.getTipo().equals("PRODUCTO")){
+          if (i.getCantidad() > producto.getStock()) {
+            throw new Exception("Stock agotado en producto: id:" + i.getIdProducto() + " - " +i.getNombreProducto() +".");
+          }
+          producto.setStock(producto.getStock() -i.getCantidad());
+          ejbFacadeProducto.edit(producto);
+        }
+        
+        
       }
       venta.setProductoventaList(productoVentaList);
       em.persist(venta);
@@ -108,7 +125,8 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
     venta.setDescuento(BigDecimal.ZERO);
     venta.setSubtotal(carrito.getTotal());
     venta.setTotal(carrito.getTotal());
-    venta.setIdCliente(cliente);
+    if(cliente.getIdCliente() != null) // si es cliente registrado
+      venta.setIdCliente(cliente);
     venta.setIdUsuario(usuario);
     venta.setEstado("CREDITO");
 
@@ -128,6 +146,17 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
         //productoVenta.setProductoventaPK(new ProductoventaPK(venta.getIdVenta(), i.getIdProducto()));
 
         productoVentaList.add(productoVenta);
+        
+        // Stock
+        Producto producto = ejbFacadeProducto.find(i.getIdProducto());
+        
+        if(producto.getTipo().equals("PRODUCTO")){
+          if (i.getCantidad() > producto.getStock()) {
+            throw new Exception("Stock agotado en producto: id:" + i.getIdProducto() + " - " +i.getNombreProducto() +".");
+          }
+          producto.setStock(producto.getStock() -i.getCantidad());
+          ejbFacadeProducto.edit(producto);
+        }
 
       }
 

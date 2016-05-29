@@ -190,3 +190,23 @@ margin-right: 10px;
 
 
 
+.ui-inputswitch .ui-inputswitch-off span {
+    padding-left: 6px;
+    padding-right: 3px;
+}
+
+.ui-inputswitch .ui-inputswitch-on {
+    padding-right: 0px;
+}
+
+.ui-inputswitch .ui-inputswitch-on, .ui-inputswitch .ui-inputswitch-off {
+  padding-top: 0px;
+}
+
+.ui-inputswitch .ui-inputswitch-off {
+    height: 24px;
+}
+.ui-inputswitch .ui-inputswitch-on{
+  height: 24px;
+}
+
