@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(name = "Producto.findByIdProducto", query = "SELECT p FROM Producto p WHERE p.idProducto = :idProducto"),
   @NamedQuery(name = "Producto.findByNombre", query = "SELECT p FROM Producto p WHERE p.nombre = :nombre"),
   @NamedQuery(name = "Producto.findByPrecioVenta", query = "SELECT p FROM Producto p WHERE p.precioVenta = :precioVenta"),
+  @NamedQuery(name = "Producto.findByPrecioCompra", query = "SELECT p FROM Producto p WHERE p.precioCompra = :precioCompra"),
   @NamedQuery(name = "Producto.findByUnidadCompra", query = "SELECT p FROM Producto p WHERE p.unidadCompra = :unidadCompra"),
   @NamedQuery(name = "Producto.findByUnidadVenta", query = "SELECT p FROM Producto p WHERE p.unidadVenta = :unidadVenta"),
   @NamedQuery(name = "Producto.findByMarca", query = "SELECT p FROM Producto p WHERE p.marca = :marca"),
@@ -65,6 +66,10 @@ public class Producto implements Serializable {
   @NotNull
   @Column(name = "precioVenta")
   private BigDecimal precioVenta;
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "precioCompra")
+  private BigDecimal precioCompra;
   @Size(max = 30)
   @Column(name = "unidadCompra")
   private String unidadCompra;
@@ -91,11 +96,11 @@ public class Producto implements Serializable {
   private String tipo;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
   private List<Productoventa> productoventaList;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
-  private List<Detallepedido> detallepedidoList;
   @JoinColumn(name = "idCategoria", referencedColumnName = "idCategoria")
   @ManyToOne(optional = false)
   private Categoria idCategoria;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
+  private List<Productocompra> productocompraList;
 
   public Producto() {
   }
@@ -104,10 +109,11 @@ public class Producto implements Serializable {
     this.idProducto = idProducto;
   }
 
-  public Producto(Integer idProducto, String nombre, BigDecimal precioVenta, int stock, String tipo) {
+  public Producto(Integer idProducto, String nombre, BigDecimal precioVenta, BigDecimal precioCompra, int stock, String tipo) {
     this.idProducto = idProducto;
     this.nombre = nombre;
     this.precioVenta = precioVenta;
+    this.precioCompra = precioCompra;
     this.stock = stock;
     this.tipo = tipo;
   }
@@ -134,6 +140,14 @@ public class Producto implements Serializable {
 
   public void setPrecioVenta(BigDecimal precioVenta) {
     this.precioVenta = precioVenta;
+  }
+
+  public BigDecimal getPrecioCompra() {
+    return precioCompra;
+  }
+
+  public void setPrecioCompra(BigDecimal precioCompra) {
+    this.precioCompra = precioCompra;
   }
 
   public String getUnidadCompra() {
@@ -201,21 +215,21 @@ public class Producto implements Serializable {
     this.productoventaList = productoventaList;
   }
 
-  @XmlTransient
-  public List<Detallepedido> getDetallepedidoList() {
-    return detallepedidoList;
-  }
-
-  public void setDetallepedidoList(List<Detallepedido> detallepedidoList) {
-    this.detallepedidoList = detallepedidoList;
-  }
-
   public Categoria getIdCategoria() {
     return idCategoria;
   }
 
   public void setIdCategoria(Categoria idCategoria) {
     this.idCategoria = idCategoria;
+  }
+
+  @XmlTransient
+  public List<Productocompra> getProductocompraList() {
+    return productocompraList;
+  }
+
+  public void setProductocompraList(List<Productocompra> productocompraList) {
+    this.productocompraList = productocompraList;
   }
 
   @Override

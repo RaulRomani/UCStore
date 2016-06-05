@@ -92,6 +92,22 @@
                   </ul>
                 </li>
               </h:panelGroup>
+              
+              
+              <h:panelGroup rendered="#{loginController.usuario.authority.equals('ROLE_ADMIN')}"> 
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
+                     aria-expanded="false"><i class="fa fa-fw fa-cubes  "></i> Compras <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li class="#{view.viewId eq '/modulos/compras/pedidoCompra.xhtml' ? 'active' : ''}">
+                      <h:link outcome="/modulos/compras/pedidoCompra"><i class="fa fa-fw fa-tasks  "></i> Pedido de compra</h:link>
+                    </li>
+                    <li class="#{view.viewId eq '/modulos/compras/compra.xhtml' ? 'active' : ''}">
+                      <h:link outcome="/modulos/compras/compra"><i class="fa fa-fw fa-check-square-o  "></i> Confirmación</h:link>
+                    </li>
+                  </ul>
+                </li>
+              </h:panelGroup>
 
 
               <h:panelGroup rendered="#{loginController.usuario.authority.equals('ROLE_ADMIN')}"> 
@@ -111,14 +127,11 @@
                     <li class="#{view.viewId eq '/modulos/mantenimiento/credito/List.xhtml' ? 'active' : ''}">
                       <h:link outcome="/modulos/mantenimiento/credito/List">Crédito</h:link>
                     </li>
-                    <li class="#{view.viewId eq '/modulos/mantenimiento/detallepedido/List.xhtml' ? 'active' : ''}">
-                      <h:link outcome="/modulos/mantenimiento/detallepedido/List">DetallePedido</h:link>
-                    </li>
                     <li class="#{view.viewId eq '/modulos/mantenimiento/pago/List.xhtml' ? 'active' : ''}">
                       <h:link outcome="/modulos/mantenimiento/pago/List">Pago</h:link>
                     </li>
-                    <li class="#{view.viewId eq '/modulos/mantenimiento/pedidocompra/List.xhtml' ? 'active' : ''}">
-                      <h:link outcome="/modulos/mantenimiento/pedidocompra/List">PedidoCompra</h:link>
+                    <li class="#{view.viewId eq '/modulos/mantenimiento/productocompra/List.xhtml' ? 'active' : ''}">
+                      <h:link outcome="/modulos/mantenimiento/productocompra/List">ProductoCompra</h:link>
                     </li>
                     <li class="#{view.viewId eq '/modulos/mantenimiento/personal/List.xhtml' ? 'active' : ''}">
                       <h:link outcome="/modulos/mantenimiento/personal/List">Personal</h:link>

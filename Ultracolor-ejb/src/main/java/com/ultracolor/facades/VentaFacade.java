@@ -64,8 +64,6 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
     venta.setEstado("CANCELADO");
 
     try {
-//    utx.begin();
-
       em.persist(venta);
       em.flush();
       List<Productoventa> productoVentaList = new ArrayList<>();
@@ -96,7 +94,7 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
       }
       venta.setProductoventaList(productoVentaList);
       em.persist(venta);
-
+      
       //save jpa many to one
 //    ejbFacadeVenta.create(venta);
 //    utx.commit();
@@ -131,7 +129,6 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
     venta.setEstado("CREDITO");
 
     try {
-
       em.persist(venta);
       em.flush();
       List<Productoventa> productoVentaList = new ArrayList<>();
@@ -173,7 +170,7 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
 
       em.persist(venta);
       System.out.println("Se guardó la venta en cuotas");
-
+      
     } catch (Exception e) {
       System.out.println(e.toString());
     }

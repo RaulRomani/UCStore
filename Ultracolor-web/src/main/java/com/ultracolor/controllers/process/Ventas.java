@@ -142,6 +142,8 @@ public class Ventas implements Serializable {
     if (!carrito.getItems().isEmpty()) {
       idVenta = ejbFacadeVenta.grabarVentaContado(carrito, clienteSelected, personal.getUsuario());
       reporteVentaContado(idVenta);
+      
+      carrito= new Carrito();
       JsfUtil.addSuccessMessage("La venta al contado se realizo correctamente.");
       logger.info("SE AGREGO UNA VENTA Y SU DETALLE");
     } else {

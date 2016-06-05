@@ -7,22 +7,15 @@
       xmlns:p="http://primefaces.org/ui">
 
   <ui:composition>
-
-    <!--
-    lazy="true"
-                       paginator="true"
-                       paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                       rows="10"
-                       rowsPerPageTemplate="10,20,30,40,50"-->
     <p:dialog id="ProductoSearchDlg" widgetVar="ProductoSearchDialog" modal="true" resizable="false" appendTo="@(body)" header="Buscar producto">
       <h:form id="ProductoSearchForm" onkeypress="if (event.keyCode == 13) { return false; }" >
         <h:panelGroup id="display">
           <p:dataTable id="datalist" 
-                       value="#{ventas.productoList}" 
+                       value="#{compras.productoList}" 
                        var="item"
                        rowKey="#{item.idProducto}"
                        selectionMode="single" 
-                       selection="#{ventas.productoSelected}"
+                       selection="#{compras.productoSelected}"
                        emptyMessage="No hay registros"
                        widgetVar="productosTable"
                        style="width: 700px"
@@ -65,7 +58,7 @@
               <p:commandButton value="Aceptar" id="agregar"
                                oncomplete="PF('ProductoSearchDialog').hide()" 
                                update=":DatosCarrito"
-                               disabled="#{empty ventas.productoSelected || ventas.productoSelected.stock == 0 ? true:false }">
+                               disabled="#{empty compras.productoSelected ? true:false }">
                 <!--<p:resetInput target=":DatosCarrito:diente" />-->
               </p:commandButton>
             </f:facet>

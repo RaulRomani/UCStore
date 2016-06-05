@@ -55,6 +55,8 @@ public class Compra implements Serializable {
   @NotNull
   @Column(name = "total")
   private BigDecimal total;
+  @Basic(optional = false)
+  @NotNull
   @Column(name = "fechaHora")
   @Temporal(TemporalType.TIMESTAMP)
   private Date fechaHora;
@@ -68,11 +70,14 @@ public class Compra implements Serializable {
   @Size(min = 1, max = 20)
   @Column(name = "estado")
   private String estado;
+  @JoinColumn(name = "idProveedor", referencedColumnName = "idProveedor")
+  @ManyToOne(optional = false)
+  private Proveedor idProveedor;
   @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
   @ManyToOne(optional = false)
   private Usuario idUsuario;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCompra")
-  private List<Pedidocompra> pedidocompraList;
+  private List<Productocompra> productocompraList;
 
   public Compra() {
   }
@@ -81,9 +86,10 @@ public class Compra implements Serializable {
     this.idCompra = idCompra;
   }
 
-  public Compra(Integer idCompra, BigDecimal total, String comprobante, String estado) {
+  public Compra(Integer idCompra, BigDecimal total, Date fechaHora, String comprobante, String estado) {
     this.idCompra = idCompra;
     this.total = total;
+    this.fechaHora = fechaHora;
     this.comprobante = comprobante;
     this.estado = estado;
   }
@@ -128,6 +134,14 @@ public class Compra implements Serializable {
     this.estado = estado;
   }
 
+  public Proveedor getIdProveedor() {
+    return idProveedor;
+  }
+
+  public void setIdProveedor(Proveedor idProveedor) {
+    this.idProveedor = idProveedor;
+  }
+
   public Usuario getIdUsuario() {
     return idUsuario;
   }
@@ -137,12 +151,12 @@ public class Compra implements Serializable {
   }
 
   @XmlTransient
-  public List<Pedidocompra> getPedidocompraList() {
-    return pedidocompraList;
+  public List<Productocompra> getProductocompraList() {
+    return productocompraList;
   }
 
-  public void setPedidocompraList(List<Pedidocompra> pedidocompraList) {
-    this.pedidocompraList = pedidocompraList;
+  public void setProductocompraList(List<Productocompra> productocompraList) {
+    this.productocompraList = productocompraList;
   }
 
   @Override

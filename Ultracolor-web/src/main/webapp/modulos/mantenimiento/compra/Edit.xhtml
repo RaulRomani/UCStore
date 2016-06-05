@@ -17,11 +17,18 @@
             <p:outputLabel value="#{bundle.EditCompraLabel_total}" for="total" />
             <p:inputText id="total" value="#{compraController.selected.total}" title="#{bundle.EditCompraTitle_total}" required="true" requiredMessage="#{bundle.EditCompraRequiredMessage_total}"/>
             <p:outputLabel value="#{bundle.EditCompraLabel_fechaHora}" for="fechaHora" />
-            <p:calendar id="fechaHora" pattern="MM/dd/yyyy HH:mm:ss" value="#{compraController.selected.fechaHora}" title="#{bundle.EditCompraTitle_fechaHora}"  showOn="button"/>
+            <p:calendar id="fechaHora" pattern="MM/dd/yyyy HH:mm:ss" value="#{compraController.selected.fechaHora}" title="#{bundle.EditCompraTitle_fechaHora}" required="true" requiredMessage="#{bundle.EditCompraRequiredMessage_fechaHora}" showOn="button"/>
             <p:outputLabel value="#{bundle.EditCompraLabel_comprobante}" for="comprobante" />
             <p:inputText id="comprobante" value="#{compraController.selected.comprobante}" title="#{bundle.EditCompraTitle_comprobante}" required="true" requiredMessage="#{bundle.EditCompraRequiredMessage_comprobante}"/>
             <p:outputLabel value="#{bundle.EditCompraLabel_estado}" for="estado" />
             <p:inputText id="estado" value="#{compraController.selected.estado}" title="#{bundle.EditCompraTitle_estado}" required="true" requiredMessage="#{bundle.EditCompraRequiredMessage_estado}"/>
+            <p:outputLabel value="#{bundle.EditCompraLabel_idProveedor}" for="idProveedor" />
+            <p:selectOneMenu id="idProveedor" value="#{compraController.selected.idProveedor}" required="true" requiredMessage="#{bundle.EditCompraRequiredMessage_idProveedor}">
+              <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+              <f:selectItems value="#{proveedorController.itemsAvailableSelectOne}"
+                             var="idProveedorItem"
+                             itemValue="#{idProveedorItem}"/>
+            </p:selectOneMenu>
             <p:outputLabel value="#{bundle.EditCompraLabel_idUsuario}" for="idUsuario" />
             <p:selectOneMenu id="idUsuario" value="#{compraController.selected.idUsuario}" required="true" requiredMessage="#{bundle.EditCompraRequiredMessage_idUsuario}">
               <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>

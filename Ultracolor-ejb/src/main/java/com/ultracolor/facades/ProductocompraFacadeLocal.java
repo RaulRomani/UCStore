@@ -5,7 +5,7 @@
  */
 package com.ultracolor.facades;
 
-import com.ultracolor.entities.Pedidocompra;
+import com.ultracolor.entities.Productocompra;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -14,19 +14,19 @@ import javax.ejb.Local;
  * @author Raul
  */
 @Local
-public interface PedidocompraFacadeLocal {
+public interface ProductocompraFacadeLocal {
 
-  void create(Pedidocompra pedidocompra);
+  void create(Productocompra productocompra);
 
-  void edit(Pedidocompra pedidocompra);
+  void edit(Productocompra productocompra);
 
-  void remove(Pedidocompra pedidocompra);
+  void remove(Productocompra productocompra);
 
-  Pedidocompra find(Object id);
+  Productocompra find(Object id);
 
-  List<Pedidocompra> findAll();
+  List<Productocompra> findAll();
 
-  List<Pedidocompra> findRange(int[] range);
+  List<Productocompra> findRange(int[] range);
 
   int count();
   

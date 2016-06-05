@@ -46,6 +46,12 @@
           </p:column>
           <p:column>
             <f:facet name="header">
+              <h:outputText value="#{bundle.ListProductoTitle_precioCompra}"/>
+            </f:facet>
+            <h:outputText value="#{item.precioCompra}"/>
+          </p:column>
+          <p:column>
+            <f:facet name="header">
               <h:outputText value="#{bundle.ListProductoTitle_unidadCompra}"/>
             </f:facet>
             <h:outputText value="#{item.unidadCompra}"/>

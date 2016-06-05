@@ -6,6 +6,9 @@
 package com.ultracolor.facades;
 
 import com.ultracolor.entities.Compra;
+import com.ultracolor.entities.Proveedor;
+import com.ultracolor.entities.Usuario;
+import com.ultracolor.entities.util.Carrito;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -29,5 +32,9 @@ public interface CompraFacadeLocal {
   List<Compra> findRange(int[] range);
 
   int count();
+  
+  public Integer grabarPedidoCompra(Carrito carrito, Proveedor proveedor, Usuario usuario);
+  public List<Compra> findByEstado(String estado);
+  public void grabarCompra(Compra compra);
   
 }

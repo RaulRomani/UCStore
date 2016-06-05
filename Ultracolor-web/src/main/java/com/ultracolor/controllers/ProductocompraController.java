@@ -1,9 +1,9 @@
 package com.ultracolor.controllers;
 
-import com.ultracolor.entities.Detallepedido;
+import com.ultracolor.entities.Productocompra;
 import com.ultracolor.controllers.util.JsfUtil;
 import com.ultracolor.controllers.util.JsfUtil.PersistAction;
-import com.ultracolor.facades.DetallepedidoFacadeLocal;
+import com.ultracolor.facades.ProductocompraFacadeLocal;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,30 +12,30 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("detallepedidoController")
+@ManagedBean(name = "productocompraController")
 @SessionScoped
-public class DetallepedidoController implements Serializable {
+public class ProductocompraController implements Serializable {
 
   @EJB
-  private com.ultracolor.facades.DetallepedidoFacadeLocal ejbFacade;
-  private List<Detallepedido> items = null;
-  private Detallepedido selected;
+  private com.ultracolor.facades.ProductocompraFacadeLocal ejbFacade;
+  private List<Productocompra> items = null;
+  private Productocompra selected;
 
-  public DetallepedidoController() {
+  public ProductocompraController() {
   }
 
-  public Detallepedido getSelected() {
+  public Productocompra getSelected() {
     return selected;
   }
 
-  public void setSelected(Detallepedido selected) {
+  public void setSelected(Productocompra selected) {
     this.selected = selected;
   }
 
@@ -45,36 +45,36 @@ public class DetallepedidoController implements Serializable {
   protected void initializeEmbeddableKey() {
   }
 
-  private DetallepedidoFacadeLocal getFacade() {
+  private ProductocompraFacadeLocal getFacade() {
     return ejbFacade;
   }
 
-  public Detallepedido prepareCreate() {
-    selected = new Detallepedido();
+  public Productocompra prepareCreate() {
+    selected = new Productocompra();
     initializeEmbeddableKey();
     return selected;
   }
 
   public void create() {
-    persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("DetallepedidoCreated"));
+    persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductocompraCreated"));
     if (!JsfUtil.isValidationFailed()) {
       items = null;    // Invalidate list of items to trigger re-query.
     }
   }
 
   public void update() {
-    persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("DetallepedidoUpdated"));
+    persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductocompraUpdated"));
   }
 
   public void destroy() {
-    persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("DetallepedidoDeleted"));
+    persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductocompraDeleted"));
     if (!JsfUtil.isValidationFailed()) {
       selected = null; // Remove selection
       items = null;    // Invalidate list of items to trigger re-query.
     }
   }
 
-  public List<Detallepedido> getItems() {
+  public List<Productocompra> getItems() {
     if (items == null) {
       items = getFacade().findAll();
     }
@@ -109,29 +109,25 @@ public class DetallepedidoController implements Serializable {
     }
   }
 
-  public Detallepedido getDetallepedido(java.lang.Integer id) {
-    return getFacade().find(id);
-  }
-
-  public List<Detallepedido> getItemsAvailableSelectMany() {
+  public List<Productocompra> getItemsAvailableSelectMany() {
     return getFacade().findAll();
   }
 
-  public List<Detallepedido> getItemsAvailableSelectOne() {
+  public List<Productocompra> getItemsAvailableSelectOne() {
     return getFacade().findAll();
   }
 
-  @FacesConverter(forClass = Detallepedido.class)
-  public static class DetallepedidoControllerConverter implements Converter {
+  @FacesConverter(forClass = Productocompra.class)
+  public static class ProductocompraControllerConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
       if (value == null || value.length() == 0) {
         return null;
       }
-      DetallepedidoController controller = (DetallepedidoController) facesContext.getApplication().getELResolver().
-              getValue(facesContext.getELContext(), null, "detallepedidoController");
-      return controller.getDetallepedido(getKey(value));
+      ProductocompraController controller = (ProductocompraController) facesContext.getApplication().getELResolver().
+              getValue(facesContext.getELContext(), null, "productocompraController");
+      return controller.getFacade().find(getKey(value));
     }
 
     java.lang.Integer getKey(String value) {
@@ -151,11 +147,11 @@ public class DetallepedidoController implements Serializable {
       if (object == null) {
         return null;
       }
-      if (object instanceof Detallepedido) {
-        Detallepedido o = (Detallepedido) object;
-        return getStringKey(o.getIdDetallepedido());
+      if (object instanceof Productocompra) {
+        Productocompra o = (Productocompra) object;
+        return getStringKey(o.getIdProductoCompra());
       } else {
-        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Detallepedido.class.getName()});
+        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Productocompra.class.getName()});
         return null;
       }
     }

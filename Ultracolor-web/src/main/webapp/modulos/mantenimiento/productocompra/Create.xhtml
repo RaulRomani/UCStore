@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+  <ui:composition>
+
+    <p:dialog id="ProductocompraCreateDlg" widgetVar="ProductocompraCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateProductocompraTitle}">
+      <h:form id="ProductocompraCreateForm">
+        <h:panelGroup id="display">
+          <p:panelGrid columns="2" rendered="#{productocompraController.selected != null}">
+            <p:outputLabel value="#{bundle.CreateProductocompraLabel_idProductoCompra}" for="idProductoCompra" />
+            <p:inputText id="idProductoCompra" value="#{productocompraController.selected.idProductoCompra}" title="#{bundle.CreateProductocompraTitle_idProductoCompra}" required="true" requiredMessage="#{bundle.CreateProductocompraRequiredMessage_idProductoCompra}"/>
+            <p:outputLabel value="#{bundle.CreateProductocompraLabel_cantidad}" for="cantidad" />
+            <p:inputText id="cantidad" value="#{productocompraController.selected.cantidad}" title="#{bundle.CreateProductocompraTitle_cantidad}" required="true" requiredMessage="#{bundle.CreateProductocompraRequiredMessage_cantidad}"/>
+            <p:outputLabel value="#{bundle.CreateProductocompraLabel_importe}" for="importe" />
+            <p:inputText id="importe" value="#{productocompraController.selected.importe}" title="#{bundle.CreateProductocompraTitle_importe}" required="true" requiredMessage="#{bundle.CreateProductocompraRequiredMessage_importe}"/>
+            <p:outputLabel value="#{bundle.CreateProductocompraLabel_recibido}" for="recibido" />
+            <p:selectBooleanCheckbox id="recibido" value="#{productocompraController.selected.recibido}" required="true" requiredMessage="#{bundle.EditProductocompraRequiredMessage_recibido}"/>
+            <p:outputLabel value="#{bundle.CreateProductocompraLabel_idProducto}" for="idProducto" />
+            <p:selectOneMenu id="idProducto" value="#{productocompraController.selected.idProducto}" required="true" requiredMessage="#{bundle.EditProductocompraRequiredMessage_idProducto}">
+              <f:selectItems value="#{productoController.itemsAvailableSelectOne}"
+                             var="idProductoItem"
+                             itemValue="#{idProductoItem}"/>
+            </p:selectOneMenu>
+            <p:outputLabel value="#{bundle.CreateProductocompraLabel_idCompra}" for="idCompra" />
+            <p:selectOneMenu id="idCompra" value="#{productocompraController.selected.idCompra}" required="true" requiredMessage="#{bundle.EditProductocompraRequiredMessage_idCompra}">
+              <f:selectItems value="#{compraController.itemsAvailableSelectOne}"
+                             var="idCompraItem"
+                             itemValue="#{idCompraItem}"/>
+            </p:selectOneMenu>
+          </p:panelGrid>
+          <p:commandButton actionListener="#{productocompraController.create}" value="#{bundle.Save}" update="display,:ProductocompraListForm:datalist,:growl" oncomplete="handleSubmit(args,'ProductocompraCreateDialog');"/>
+          <p:commandButton value="#{bundle.Cancel}" onclick="ProductocompraCreateDialog.hide()"/>
+        </h:panelGroup>
+      </h:form>
+    </p:dialog>
+
+  </ui:composition>
+</html>

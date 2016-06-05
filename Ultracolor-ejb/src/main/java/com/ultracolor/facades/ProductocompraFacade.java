@@ -5,7 +5,7 @@
  */
 package com.ultracolor.facades;
 
-import com.ultracolor.entities.Detallepedido;
+import com.ultracolor.entities.Productocompra;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author Raul
  */
 @Stateless
-public class DetallepedidoFacade extends AbstractFacade<Detallepedido> implements DetallepedidoFacadeLocal {
+public class ProductocompraFacade extends AbstractFacade<Productocompra> implements ProductocompraFacadeLocal {
   @PersistenceContext(unitName = "com.ultracolor_Ultracolor-ejb_ejb_1.0PU")
   private EntityManager em;
 
@@ -24,8 +24,8 @@ public class DetallepedidoFacade extends AbstractFacade<Detallepedido> implement
     return em;
   }
 
-  public DetallepedidoFacade() {
-    super(Detallepedido.class);
+  public ProductocompraFacade() {
+    super(Productocompra.class);
   }
   
 }

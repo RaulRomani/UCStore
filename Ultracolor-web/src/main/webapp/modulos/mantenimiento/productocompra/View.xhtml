@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+  <ui:composition>
+
+    <p:dialog id="ProductocompraViewDlg" widgetVar="ProductocompraViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewProductocompraTitle}">
+      <h:form id="ProductocompraViewForm">
+        <h:panelGroup id="display">
+          <p:panelGrid columns="2" rendered="#{productocompraController.selected != null}">
+            <h:outputText value="#{bundle.ViewProductocompraLabel_idProductoCompra}"/>
+            <h:outputText value="#{productocompraController.selected.idProductoCompra}" title="#{bundle.ViewProductocompraTitle_idProductoCompra}"/>
+            <h:outputText value="#{bundle.ViewProductocompraLabel_cantidad}"/>
+            <h:outputText value="#{productocompraController.selected.cantidad}" title="#{bundle.ViewProductocompraTitle_cantidad}"/>
+            <h:outputText value="#{bundle.ViewProductocompraLabel_importe}"/>
+            <h:outputText value="#{productocompraController.selected.importe}" title="#{bundle.ViewProductocompraTitle_importe}"/>
+            <h:outputText value="#{bundle.ViewProductocompraLabel_recibido}"/>
+            <p:selectBooleanCheckbox value="#{productocompraController.selected.recibido}" disabled="true"/>
+            <h:outputText value="#{bundle.ViewProductocompraLabel_idProducto}"/>
+            <h:outputText value="#{productocompraController.selected.idProducto}" title="#{bundle.ViewProductocompraTitle_idProducto}"/>
+            <h:outputText value="#{bundle.ViewProductocompraLabel_idCompra}"/>
+            <h:outputText value="#{productocompraController.selected.idCompra}" title="#{bundle.ViewProductocompraTitle_idCompra}"/>
+          </p:panelGrid>
+          <p:commandButton value="#{bundle.Close}" onclick="ProductocompraViewDialog.hide()"/>
+        </h:panelGroup>
+      </h:form>
+    </p:dialog>
+
+  </ui:composition>
+</html>

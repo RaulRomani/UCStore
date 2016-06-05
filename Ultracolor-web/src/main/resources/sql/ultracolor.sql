@@ -1,45 +1,18 @@
--- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 29-05-2016 a las 08:48:05
+
 -- Versión del servidor: 10.1.8-MariaDB
 -- Versión de PHP: 5.5.30
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/** NOTAS
+  Campo null by default
+**/
 
 --
--- Base de datos: `ultracolor`
+-- Base de datos: `ULTRACOLOR`
 --
+DROP DATABASE IF EXISTS ultracolor;
 CREATE DATABASE IF NOT EXISTS `ultracolor` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `ultracolor`;
 
--- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `categoria`
---
-
-CREATE TABLE `categoria` (
-  `idCategoria` int(11) UNSIGNED NOT NULL,
-  `nombre` varchar(25) NOT NULL,
-  `descripcion` varchar(150) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `categoria`
---
-
-INSERT INTO `categoria` (`idCategoria`, `nombre`, `descripcion`) VALUES
-(1, 'Tintas', '');
 
 -- --------------------------------------------------------
 
@@ -48,182 +21,297 @@ INSERT INTO `categoria` (`idCategoria`, `nombre`, `descripcion`) VALUES
 --
 
 CREATE TABLE `cliente` (
-  `idCliente` int(11) UNSIGNED NOT NULL,
-  `nombre` varchar(50) NOT NULL,
-  `apelllido` varchar(100) DEFAULT NULL,
-  `DNI` char(8) DEFAULT NULL,
-  `RUC` char(11) DEFAULT NULL,
-  `direccion` varchar(100) DEFAULT NULL,
-  `celular` varchar(20) DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `sexo` varchar(10) DEFAULT NULL,
-  `edad` varchar(3) DEFAULT NULL,
-  `correo` varchar(50) DEFAULT NULL,
-  `lugarNacimiento` varchar(100) DEFAULT NULL,
-  `fechaNacimiento` date DEFAULT NULL,
-  `categoria` varchar(10) DEFAULT NULL,
-  `fechaCreacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '+ read, - update'
+  `idCliente` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NOT NULL, -- nombre o razon social
+  `apelllido` varchar(100),
+  `DNI` char(8), -- se registra con null, cuando es persona juridica
+  `RUC` char(11),
+  `direccion` varchar(100),
+  `celular` varchar(20),
+  `telefono` varchar(20),
+  `sexo` varchar(10),
+  `edad` varchar(3),
+
+  `correo` varchar(50),
+  `lugarNacimiento` varchar(100),
+  `fechaNacimiento` date,
+  `categoria` varchar(10), -- general, vip, impresion //Para sacar precio de gigantografia, solo puede ver/modificar el administrador
+  `fechaCreacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '+ read, - update', 
+  
+  PRIMARY KEY (idCliente)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `cliente`
---
 
-INSERT INTO `cliente` (`idCliente`, `nombre`, `apelllido`, `DNI`, `RUC`, `direccion`, `celular`, `telefono`, `sexo`, `edad`, `correo`, `lugarNacimiento`, `fechaNacimiento`, `categoria`, `fechaCreacion`) VALUES
-(1, 'Raúl', '', '', '', '', '', '', '', '', '', '', NULL, '', '2016-05-25 05:00:00'),
-(2, 'Moises', '', '', '', '', '', '', '', '', '', '', NULL, '', '2016-05-11 05:00:00'),
-(3, 'Carlos', '', '', '', '', '', '', NULL, NULL, '', '', NULL, '', '2016-05-25 05:00:00'),
-(4, 'Jorge', 'Ramirez', '', '', '', '', '', NULL, NULL, '', '', NULL, '', '2016-05-26 01:20:17'),
-(5, 'xxxx', '', '', '', '', '', '', '', '', '', '', NULL, '', '2016-05-25 05:00:00'),
-(6, 'yyyy', '', '', '', '', '', '', NULL, NULL, '', '', NULL, '', '2016-05-26 01:33:11'),
-(7, 'zzzz', '', '', '', '', '', '', NULL, NULL, '', '', NULL, '', '2016-05-26 01:33:23'),
-(8, 'Carlos', '', '47830294', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2016-05-28 21:00:24'),
-(9, 'Raúl', '', '78675542', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2016-05-28 21:07:34'),
-(10, 'Carlos', 'Arberto', '54678934', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2016-05-28 21:15:59'),
-(11, 'AAAA', '', '45673423', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2016-05-28 21:45:22'),
-(12, 'BBBB', '', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2016-05-28 21:50:17'),
-(13, 'RAUL', '', '47830392', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2016-05-28 22:11:02');
 
 -- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `compra`
---
-
-CREATE TABLE `compra` (
-  `idCompra` int(11) UNSIGNED NOT NULL,
-  `idUsuario` int(11) UNSIGNED NOT NULL,
-  `total` decimal(8,2) NOT NULL,
-  `fechaHora` datetime DEFAULT NULL,
-  `comprobante` varchar(20) NOT NULL DEFAULT 'BOLETA',
-  `estado` varchar(20) NOT NULL DEFAULT 'CANCELADO'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `credito`
---
-
-CREATE TABLE `credito` (
-  `idCuota` int(11) UNSIGNED NOT NULL,
-  `IdVenta` int(11) UNSIGNED NOT NULL,
-  `totalcuotas` int(2) NOT NULL,
-  `cuotaspagado` int(2) NOT NULL,
-  `fechaHora` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'fecha automático tanto en inserciones pero NO en actualizaciones',
-  `plazo` varchar(100) NOT NULL,
-  `inicial` decimal(8,2) NOT NULL,
-  `importe` decimal(8,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `credito`
---
-
-INSERT INTO `credito` (`idCuota`, `IdVenta`, `totalcuotas`, `cuotaspagado`, `fechaHora`, `plazo`, `inicial`, `importe`) VALUES
-(1, 1, 3, 0, '2016-05-28 05:13:34', 'QUINCENAL', '5.00', '5.00'),
-(2, 4, 2, 0, '2016-05-29 00:50:52', 'MENSUAL', '0.00', '5.00'),
-(3, 5, 2, 0, '2016-05-29 05:08:41', 'QUINCENAL', '10.00', '15.00'),
-(4, 6, 2, 0, '2016-05-29 05:11:01', 'MENSUAL', '0.00', '10.00'),
-(5, 7, 2, 0, '2016-05-29 05:13:08', 'MENSUAL', '0.00', '5.00'),
-(6, 8, 2, 0, '2016-05-29 05:17:19', 'MENSUAL', '0.00', '5.00'),
-(7, 10, 2, 0, '2016-05-29 05:32:47', 'MENSUAL', '0.00', '5.00');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `detallepedido`
---
-
-CREATE TABLE `detallepedido` (
-  `idDetallepedido` int(11) UNSIGNED NOT NULL,
-  `idPedidocompra` int(11) UNSIGNED NOT NULL,
-  `idProducto` int(11) UNSIGNED NOT NULL,
-  `cantidad` int(4) UNSIGNED NOT NULL,
-  `precio` decimal(8,2) UNSIGNED NOT NULL,
-  `importe` decimal(8,2) UNSIGNED NOT NULL,
-  `recibido` tinyint(1) NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '+ read, - update'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pago`
---
-
-CREATE TABLE `pago` (
-  `idPago` int(11) UNSIGNED NOT NULL,
-  `idUsuario` int(11) UNSIGNED NOT NULL,
-  `idPersonal` int(11) UNSIGNED NOT NULL,
-  `descripcion` varchar(200) DEFAULT NULL,
-  `monto` decimal(8,2) NOT NULL,
-  `fechaHora` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'fecha automático tanto en inserciones pero NO en actualizaciones',
-  `tipo` varchar(10) NOT NULL DEFAULT 'ADELANTO'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pedidocompra`
---
-
-CREATE TABLE `pedidocompra` (
-  `idPedidocompra` int(11) UNSIGNED NOT NULL,
-  `idCompra` int(11) UNSIGNED NOT NULL,
-  `idProveedor` int(11) UNSIGNED NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '+ read, - update'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
 --
 -- Estructura de tabla para la tabla `personal`
 --
 
 CREATE TABLE `personal` (
-  `idPersonal` int(11) UNSIGNED NOT NULL,
+  `idPersonal` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   `apellido` varchar(100) NOT NULL,
   `cargo` varchar(40) NOT NULL,
   `DNI` char(8) NOT NULL,
-  `especialidad` varchar(100) DEFAULT NULL,
-  `correo` varchar(50) DEFAULT NULL,
-  `direccion` varchar(100) DEFAULT NULL,
-  `lugarNacimiento` varchar(200) DEFAULT NULL,
-  `fechaNacimiento` date DEFAULT NULL,
-  `celular` varchar(20) DEFAULT NULL,
-  `sexo` varchar(10) DEFAULT NULL,
-  `edad` varchar(3) DEFAULT NULL,
-  `fechaCreacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '+ read, - update'
+  `especialidad` varchar(100),
+  `correo` varchar(50),
+  `direccion` varchar(100),
+  `lugarNacimiento` varchar(200),
+  `fechaNacimiento` date,
+  `celular` varchar(20),
+  `sexo` varchar(10),
+  `edad` varchar(3),
+  `fechaCreacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '+ read, - update', 
+
+  PRIMARY KEY (idPersonal)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
 --
--- Volcado de datos para la tabla `personal`
+-- Estructura de tabla para la tabla `usuario`
 --
 
-INSERT INTO `personal` (`idPersonal`, `nombre`, `apellido`, `cargo`, `DNI`, `especialidad`, `correo`, `direccion`, `lugarNacimiento`, `fechaNacimiento`, `celular`, `sexo`, `edad`, `fechaCreacion`) VALUES
-(1, 'Raúl', 'Romaní Flores', 'Desarrollador', '47830392', 'Desarrollador', NULL, 'Jr. Ucayali 456', NULL, NULL, '', NULL, NULL, '2016-05-14 12:46:35');
+CREATE TABLE `usuario` (
+  `idUsuario` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idPersonal` int(11) unsigned NOT NULL,
+
+  `username` varchar(100) NOT NULL,
+  `password` char(128) NOT NULL,
+  `authority` varchar(50) NOT NULL DEFAULT 'ROLE_SALER', -- administrador, vendedor, cajero, cliente(web)
+  `enabled` tinyint(1) DEFAULT '0', -- activo|baneado //en caso de web
+  `nota` varchar(200),
+  PRIMARY KEY (idUsuario),
+  FOREIGN KEY (idPersonal) REFERENCES personal(idPersonal)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+
 
 -- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `pago`
+--
 
+CREATE TABLE `pago` (
+  `idPago` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idUsuario` int(11) unsigned NOT NULL,
+  `idPersonal` int(11) unsigned NOT NULL,
+
+  `descripcion` varchar(200),
+  `monto` decimal(8,2) NOT NULL,
+  `fechaHora` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'fecha automático tanto en inserciones pero NO en actualizaciones',
+
+  `tipo` varchar(10) DEFAULT 'ADELANTO' NOT NULL, -- tipo: adelanto, sueldo   //Los adelandos van como egresos diario y los sueldos van como egresos mensuales
+
+  PRIMARY KEY (idPago),
+  FOREIGN KEY (idPersonal) REFERENCES personal(idPersonal),
+  FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `venta`
+--
+
+CREATE TABLE `venta` (
+  `idVenta` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idUsuario` int(11) unsigned NOT NULL,
+  `idCliente` int(11) unsigned,  -- una venta sin cliente registrado
+
+  `subtotal` decimal(8,2) NOT NULL,  -- depende de si hay descuento
+  `descuento` decimal(8,2) NOT NULL,  -- si no hay descuento : 0.00
+
+  `total` decimal(8,2) NOT NULL,
+  `fechaHora` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'En caso de crédito se actualiza la fecha al cancelar las cuotas',
+  `formapago` varchar(20) DEFAULT 'CONTADO' NOT NULL,
+  `comprobante` varchar(20) DEFAULT 'BOLETA' NOT NULL,
+  `estado` varchar(20) DEFAULT 'CANCELADO' NOT NULL, -- cancelado, credito, espera: no cancelado, anulado(only rol administrador, por Mantenimiento)
+
+  PRIMARY KEY (idVenta),
+  FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario),
+  FOREIGN KEY (idCliente) REFERENCES cliente(idCliente),
+  CONSTRAINT chk_venta_formapago
+	CHECK (formapago IN ('CONTADO', 'CRÉDITO')),  -- DEPOSITO, TARJETA (WEB)
+  CONSTRAINT chk_venta_comprobante
+	CHECK (comprobante IN ('BOLETA', 'FACTURA')) -- Recibos que se imprimen: GUIA DE REMICION, NOTA DE CREDITO
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `proveedor`
+--
+
+CREATE TABLE `proveedor` (
+  `idProveedor` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `razonSocial` varchar(60) NOT NULL,
+  `RUC` char(11) NOT NULL,
+
+  `direccion` varchar(100),
+  `telefono` varchar(20),
+  `celular` varchar(20),
+  `correo` varchar(30),
+  `paginaWeb` varchar(30),
+  `fechaCreacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '+ read, - update', 
+  `Nota` varchar(200),
+  
+  PRIMARY KEY (idProveedor)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `compra`
+--
+
+CREATE TABLE `compra` (
+  `idCompra` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idUsuario` int(11) unsigned NOT NULL,
+  `idProveedor` int(11) unsigned NOT NULL,
+  
+  `total` decimal(8,2) NOT NULL,
+  `fechaHora` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+
+  -- `formapago` varchar(20) DEFAULT 'CONTADO' NOT NULL,
+  `comprobante` varchar(20) DEFAULT 'BOLETA' NOT NULL,
+  -- pagado, espera: no pagado, anulado(only rol administrador, por Mantenimiento)
+  `estado` varchar(20) DEFAULT 'ESPERA' NOT NULL, 
+
+  PRIMARY KEY (idCompra),
+  FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario),
+  FOREIGN KEY (idProveedor) REFERENCES proveedor(idProveedor),
+  CONSTRAINT chk_venta_formapago
+  CHECK (formapago IN ('CONTADO', 'CRÉDITO')),  -- DEPOSITO, TARJETA (WEB)
+  CONSTRAINT chk_venta_comprobante
+  CHECK (comprobante IN ('BOLETA', 'FACTURA')) -- Recibos que se imprimen: GUIA DE REMICION, NOTA DE CREDITO
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+/*==============================================================*/
+/* Table: categoria                                             */
+/*==============================================================*/
+create table categoria
+(
+   idCategoria int(11) unsigned NOT NULL AUTO_INCREMENT,
+   nombre varchar(25) not null,
+   descripcion varchar(150),
+   primary key (idCategoria)
+)ENGINE=INNODB;
+
+
+-- --------------------------------------------------------
 --
 -- Estructura de tabla para la tabla `producto`
 --
 
 CREATE TABLE `producto` (
-  `idProducto` int(11) UNSIGNED NOT NULL,
-  `idCategoria` int(11) UNSIGNED NOT NULL,
+  `idProducto` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idCategoria` int(11) unsigned NOT NULL,
   `nombre` varchar(200) NOT NULL,
-  `precioVenta` decimal(8,2) NOT NULL,
-  `unidadCompra` varchar(30) DEFAULT NULL,
-  `unidadVenta` varchar(30) DEFAULT NULL,
-  `marca` varchar(30) DEFAULT NULL,
-  `descripcion` varchar(200) DEFAULT NULL,
-  `fechaVencimiento` date DEFAULT NULL,
-  `stock` int(4) NOT NULL,
-  `tipo` char(8) NOT NULL DEFAULT 'PRODUCTO'
+  `precioVenta` decimal(8,2) NOT NULL, -- incluido IGV
+  `precioCompra` decimal(8,2) NOT NULL, -- incluido IGV
+  `unidadCompra` varchar(30),
+  `unidadVenta` varchar(30),
+  `marca` varchar(30),
+  `descripcion` varchar(200),
+  `fechaVencimiento` date,
+  `stock` int(4) not null,
+  `tipo` char(8) default "PRODUCTO" not null, --  producto o servicio
+
+  PRIMARY KEY (idProducto),
+  FOREIGN KEY (idCategoria) REFERENCES categoria(idCategoria)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `productocompra`
+--
+
+CREATE TABLE `productocompra` (
+  `idProductoCompra` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idCompra` int(11) unsigned NOT NULL,
+  `idProducto` int(11) unsigned NOT NULL,
+
+  `cantidad` int(4) unsigned NOT NULL,
+  `importe` decimal(8,2) unsigned NOT NULL,
+
+  `recibido` boolean NOT NULL, -- true, false
+  
+  PRIMARY KEY (idProductoCompra),
+  FOREIGN KEY (idCompra) REFERENCES compra(idCompra),
+  FOREIGN KEY (idProducto) REFERENCES producto(idProducto)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `productoventa`
+--
+
+CREATE TABLE `productoventa` (
+  `idProductoVenta` int(11) unsigned NOT NULL AUTO_INCREMENT,  
+  `idVenta` int(11) unsigned NOT NULL,
+  `idProducto` int(11) unsigned NOT NULL,
+
+  `cantidad` int(2) NOT NULL,
+  `importe` decimal(8,2) NOT NULL,
+
+  PRIMARY KEY (idProductoVenta),
+  FOREIGN KEY (idVenta) REFERENCES venta(idVenta),
+  FOREIGN KEY (idProducto) REFERENCES producto(idProducto)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `crédito`
+--
+
+CREATE TABLE `credito` (
+  
+  `idCuota` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `IdVenta` int(11) unsigned NOT NULL, 
+  `totalcuotas` int(2) NOT NULL, -- Total de cuotas a pagar
+  `cuotaspagado` int(2) NOT NULL, -- Cuotas que se ha pagado
+  `fechaHora` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'fecha automático tanto en inserciones pero NO en actualizaciones',
+  `plazo` varchar(100) NOT NULL,
+  `inicial` decimal(8,2) NOT NULL,
+  `importe` decimal(8,2) NOT NULL,
+
+  PRIMARY KEY (idCuota),
+  CONSTRAINT chk_cuota_plazo
+	CHECK (plazo IN ('QUINCENAL', 'MENSUAL', 'DIA')),
+  FOREIGN KEY (IdVenta) REFERENCES venta(IdVenta)
+
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+--
+-- Volcado de datos para la tabla `personal`
+--
+
+INSERT INTO `personal` (`idPersonal`, `nombre`, `apellido`, `cargo`, `DNI`, `especialidad`, `direccion`, `lugarNacimiento`, `fechaNacimiento`, `celular`, `sexo`, `edad`, `fechaCreacion`) VALUES
+(1, 'Raúl', 'Romaní Flores', 'Desarrollador', '47830392', 'Desarrollador', 'Jr. Ucayali 456', NULL, NULL, '', NULL, NULL, '2016-05-14 07:46:35');
+
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`idUsuario`, `idPersonal`, `username`, `password`, `authority`, `enabled`, `nota`) VALUES
+(1, 1, 'romanidev@ultracolor.com', '4863e579ffaa910e7decd4f57d4b66c48753d46259acbb3590508ccf3079b63ffb60df9feeacbf5cebd592dd7facab4c208d748cd2f8f40c52131ba809a0cf25', 'ROLE_ADMIN', 1, NULL);  -- password1
+
+
+--
+-- Volcado de datos para la tabla `categoria`
+--
+
+INSERT INTO `categoria` (`idCategoria`, `nombre`, `descripcion`) VALUES
+(1, 'Tintas', '');
 
 --
 -- Volcado de datos para la tabla `producto`
@@ -232,339 +320,6 @@ CREATE TABLE `producto` (
 INSERT INTO `producto` (`idProducto`, `idCategoria`, `nombre`, `precioVenta`, `unidadCompra`, `unidadVenta`, `marca`, `descripcion`, `fechaVencimiento`, `stock`, `tipo`) VALUES
 (1, 1, 'Tinta color negro - canon', '10.00', '', '', '', '', NULL, 17, 'PRODUCTO');
 
--- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `productoventa`
---
 
-CREATE TABLE `productoventa` (
-  `idProductoVenta` int(11) UNSIGNED NOT NULL,
-  `idVenta` int(11) UNSIGNED NOT NULL,
-  `idProducto` int(11) UNSIGNED NOT NULL,
-  `cantidad` int(2) NOT NULL,
-  `importe` decimal(8,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `productoventa`
---
-
-INSERT INTO `productoventa` (`idProductoVenta`, `idVenta`, `idProducto`, `cantidad`, `importe`) VALUES
-(1, 1, 1, 2, '20.00'),
-(2, 2, 1, 2, '20.00'),
-(3, 3, 1, 1, '10.00'),
-(4, 4, 1, 1, '10.00'),
-(5, 5, 1, 4, '40.00'),
-(6, 6, 1, 2, '20.00'),
-(7, 7, 1, 1, '10.00'),
-(8, 8, 1, 1, '10.00'),
-(9, 10, 1, 1, '10.00');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `proveedor`
---
-
-CREATE TABLE `proveedor` (
-  `idProveedor` int(11) UNSIGNED NOT NULL,
-  `razonSocial` varchar(60) NOT NULL,
-  `RUC` char(11) NOT NULL,
-  `direccion` varchar(100) DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `celular` varchar(20) DEFAULT NULL,
-  `correo` varchar(30) DEFAULT NULL,
-  `paginaWeb` varchar(30) DEFAULT NULL,
-  `fechaCreacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '+ read, - update',
-  `Nota` varchar(200) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuario`
---
-
-CREATE TABLE `usuario` (
-  `idUsuario` int(11) UNSIGNED NOT NULL,
-  `idPersonal` int(11) UNSIGNED NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `password` char(128) NOT NULL,
-  `authority` varchar(50) NOT NULL DEFAULT 'ROLE_SALER',
-  `enabled` tinyint(1) DEFAULT '0',
-  `nota` varchar(200) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `usuario`
---
-
-INSERT INTO `usuario` (`idUsuario`, `idPersonal`, `username`, `password`, `authority`, `enabled`, `nota`) VALUES
-(1, 1, 'romanidev@ultracolor.com', '4863e579ffaa910e7decd4f57d4b66c48753d46259acbb3590508ccf3079b63ffb60df9feeacbf5cebd592dd7facab4c208d748cd2f8f40c52131ba809a0cf25', 'ROLE_ADMIN', 1, NULL);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `venta`
---
-
-CREATE TABLE `venta` (
-  `idVenta` int(11) UNSIGNED NOT NULL,
-  `idUsuario` int(11) UNSIGNED NOT NULL,
-  `idCliente` int(11) UNSIGNED DEFAULT NULL,
-  `subtotal` decimal(8,2) NOT NULL,
-  `descuento` decimal(8,2) NOT NULL,
-  `total` decimal(8,2) NOT NULL,
-  `fechaHora` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'En caso de crédito se actualiza la fecha al cancelar las cuotas',
-  `formapago` varchar(20) NOT NULL DEFAULT 'CONTADO',
-  `comprobante` varchar(20) NOT NULL DEFAULT 'BOLETA',
-  `estado` varchar(20) NOT NULL DEFAULT 'CANCELADO'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `venta`
---
-
-INSERT INTO `venta` (`idVenta`, `idUsuario`, `idCliente`, `subtotal`, `descuento`, `total`, `fechaHora`, `formapago`, `comprobante`, `estado`) VALUES
-(1, 1, 1, '20.00', '0.00', '20.00', '2016-05-28 05:13:34', 'CUOTAS', '', 'CREDITO'),
-(2, 1, 1, '20.00', '0.00', '20.00', '2016-05-28 06:13:00', 'CONTADO', 'BOLETA', 'CANCELADO'),
-(3, 1, NULL, '10.00', '0.00', '10.00', '2016-05-29 00:40:50', 'CONTADO', 'BOLETA', 'CANCELADO'),
-(4, 1, NULL, '10.00', '0.00', '10.00', '2016-05-29 00:50:52', 'CUOTAS', '', 'CREDITO'),
-(5, 1, 4, '40.00', '0.00', '40.00', '2016-05-29 05:08:41', 'CUOTAS', '', 'CREDITO'),
-(6, 1, 10, '20.00', '0.00', '20.00', '2016-05-29 05:11:01', 'CUOTAS', '', 'CREDITO'),
-(7, 1, 10, '10.00', '0.00', '10.00', '2016-05-29 05:13:08', 'CUOTAS', '', 'CREDITO'),
-(8, 1, 10, '10.00', '0.00', '10.00', '2016-05-29 05:17:19', 'CUOTAS', '', 'CREDITO'),
-(10, 1, 10, '10.00', '0.00', '10.00', '2016-05-29 05:32:47', 'CUOTAS', '', 'CREDITO');
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `categoria`
---
-ALTER TABLE `categoria`
-  ADD PRIMARY KEY (`idCategoria`);
-
---
--- Indices de la tabla `cliente`
---
-ALTER TABLE `cliente`
-  ADD PRIMARY KEY (`idCliente`);
-
---
--- Indices de la tabla `compra`
---
-ALTER TABLE `compra`
-  ADD PRIMARY KEY (`idCompra`),
-  ADD KEY `idUsuario` (`idUsuario`);
-
---
--- Indices de la tabla `credito`
---
-ALTER TABLE `credito`
-  ADD PRIMARY KEY (`idCuota`),
-  ADD KEY `IdVenta` (`IdVenta`);
-
---
--- Indices de la tabla `detallepedido`
---
-ALTER TABLE `detallepedido`
-  ADD PRIMARY KEY (`idDetallepedido`),
-  ADD KEY `idPedidocompra` (`idPedidocompra`),
-  ADD KEY `idProducto` (`idProducto`);
-
---
--- Indices de la tabla `pago`
---
-ALTER TABLE `pago`
-  ADD PRIMARY KEY (`idPago`),
-  ADD KEY `idPersonal` (`idPersonal`),
-  ADD KEY `idUsuario` (`idUsuario`);
-
---
--- Indices de la tabla `pedidocompra`
---
-ALTER TABLE `pedidocompra`
-  ADD PRIMARY KEY (`idPedidocompra`),
-  ADD KEY `idCompra` (`idCompra`),
-  ADD KEY `idProveedor` (`idProveedor`);
-
---
--- Indices de la tabla `personal`
---
-ALTER TABLE `personal`
-  ADD PRIMARY KEY (`idPersonal`);
-
---
--- Indices de la tabla `producto`
---
-ALTER TABLE `producto`
-  ADD PRIMARY KEY (`idProducto`),
-  ADD KEY `idCategoria` (`idCategoria`);
-
---
--- Indices de la tabla `productoventa`
---
-ALTER TABLE `productoventa`
-  ADD PRIMARY KEY (`idProductoVenta`),
-  ADD KEY `idVenta` (`idVenta`),
-  ADD KEY `idProducto` (`idProducto`);
-
---
--- Indices de la tabla `proveedor`
---
-ALTER TABLE `proveedor`
-  ADD PRIMARY KEY (`idProveedor`);
-
---
--- Indices de la tabla `usuario`
---
-ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`idUsuario`),
-  ADD KEY `idPersonal` (`idPersonal`);
-
---
--- Indices de la tabla `venta`
---
-ALTER TABLE `venta`
-  ADD PRIMARY KEY (`idVenta`),
-  ADD KEY `idUsuario` (`idUsuario`),
-  ADD KEY `idCliente` (`idCliente`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `categoria`
---
-ALTER TABLE `categoria`
-  MODIFY `idCategoria` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT de la tabla `cliente`
---
-ALTER TABLE `cliente`
-  MODIFY `idCliente` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
---
--- AUTO_INCREMENT de la tabla `compra`
---
-ALTER TABLE `compra`
-  MODIFY `idCompra` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `credito`
---
-ALTER TABLE `credito`
-  MODIFY `idCuota` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
---
--- AUTO_INCREMENT de la tabla `detallepedido`
---
-ALTER TABLE `detallepedido`
-  MODIFY `idDetallepedido` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `pago`
---
-ALTER TABLE `pago`
-  MODIFY `idPago` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `pedidocompra`
---
-ALTER TABLE `pedidocompra`
-  MODIFY `idPedidocompra` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `personal`
---
-ALTER TABLE `personal`
-  MODIFY `idPersonal` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT de la tabla `producto`
---
-ALTER TABLE `producto`
-  MODIFY `idProducto` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT de la tabla `productoventa`
---
-ALTER TABLE `productoventa`
-  MODIFY `idProductoVenta` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
---
--- AUTO_INCREMENT de la tabla `proveedor`
---
-ALTER TABLE `proveedor`
-  MODIFY `idProveedor` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `usuario`
---
-ALTER TABLE `usuario`
-  MODIFY `idUsuario` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT de la tabla `venta`
---
-ALTER TABLE `venta`
-  MODIFY `idVenta` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `compra`
---
-ALTER TABLE `compra`
-  ADD CONSTRAINT `compra_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`);
-
---
--- Filtros para la tabla `credito`
---
-ALTER TABLE `credito`
-  ADD CONSTRAINT `credito_ibfk_1` FOREIGN KEY (`IdVenta`) REFERENCES `venta` (`idVenta`);
-
---
--- Filtros para la tabla `detallepedido`
---
-ALTER TABLE `detallepedido`
-  ADD CONSTRAINT `detallepedido_ibfk_1` FOREIGN KEY (`idPedidocompra`) REFERENCES `pedidocompra` (`idPedidocompra`),
-  ADD CONSTRAINT `detallepedido_ibfk_2` FOREIGN KEY (`idProducto`) REFERENCES `producto` (`idProducto`);
-
---
--- Filtros para la tabla `pago`
---
-ALTER TABLE `pago`
-  ADD CONSTRAINT `pago_ibfk_1` FOREIGN KEY (`idPersonal`) REFERENCES `personal` (`idPersonal`),
-  ADD CONSTRAINT `pago_ibfk_2` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`);
-
---
--- Filtros para la tabla `pedidocompra`
---
-ALTER TABLE `pedidocompra`
-  ADD CONSTRAINT `pedidocompra_ibfk_1` FOREIGN KEY (`idCompra`) REFERENCES `compra` (`idCompra`),
-  ADD CONSTRAINT `pedidocompra_ibfk_2` FOREIGN KEY (`idProveedor`) REFERENCES `proveedor` (`idProveedor`);
-
---
--- Filtros para la tabla `producto`
---
-ALTER TABLE `producto`
-  ADD CONSTRAINT `producto_ibfk_1` FOREIGN KEY (`idCategoria`) REFERENCES `categoria` (`idCategoria`);
-
---
--- Filtros para la tabla `productoventa`
---
-ALTER TABLE `productoventa`
-  ADD CONSTRAINT `productoventa_ibfk_1` FOREIGN KEY (`idVenta`) REFERENCES `venta` (`idVenta`),
-  ADD CONSTRAINT `productoventa_ibfk_2` FOREIGN KEY (`idProducto`) REFERENCES `producto` (`idProducto`);
-
---
--- Filtros para la tabla `usuario`
---
-ALTER TABLE `usuario`
-  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`idPersonal`) REFERENCES `personal` (`idPersonal`);
-
---
--- Filtros para la tabla `venta`
---
-ALTER TABLE `venta`
-  ADD CONSTRAINT `venta_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`),
-  ADD CONSTRAINT `venta_ibfk_2` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`);
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- ALTER TABLE `venta` CHANGE `idCliente` `idCliente` INT(11) UNSIGNED NULL; 

@@ -41,6 +41,10 @@
             access="ROLE_SALER, ROLE_ADMIN" requires-channel="https" />
         
         <sec:intercept-url 
+            pattern="/faces/modulos/compras/**" 
+            access="ROLE_ADMIN" requires-channel="https" />
+        
+        <sec:intercept-url 
             pattern="/faces/main.xhtml" 
             access="ROLE_SALER, ROLE_ADMIN" requires-channel="https" />
         
