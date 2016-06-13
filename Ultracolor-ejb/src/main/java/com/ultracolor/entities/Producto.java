@@ -86,7 +86,6 @@ public class Producto implements Serializable {
   @Temporal(TemporalType.DATE)
   private Date fechaVencimiento;
   @Basic(optional = false)
-  @NotNull
   @Column(name = "stock")
   private int stock;
   @Basic(optional = false)

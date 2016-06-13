@@ -175,12 +175,11 @@
                       <p:commandButton value="Enviar" 
                                        icon="fa fa-envelope"
                                        actionListener="#{compras.enviarCorreo()}"
-                                       update=":growl"
-                                       ajax="false"/>
+                                       update=":growl" />
                     </p:tab>
                     <p:tab title="Proforma" id="proforma">
-                      <p:commandButton value="Imprimir" 
-                                       icon="fa fa-print"
+                      <p:commandButton value="Descargar" 
+                                       icon="fa  fa-file-pdf-o"
                                        actionListener="#{compras.imprimirProforma()}"
                                        update=":growl"
                                        ajax="false"/>

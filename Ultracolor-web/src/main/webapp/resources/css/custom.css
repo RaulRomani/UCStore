@@ -210,3 +210,10 @@ margin-right: 10px;
   height: 24px;
 }
 
+
+
+.ui-datatable-summaryrow {
+  border: 1px solid #dddddd;
+  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+  background-repeat: repeat-x;
+}

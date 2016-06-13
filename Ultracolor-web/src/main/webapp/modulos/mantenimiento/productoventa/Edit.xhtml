@@ -18,6 +18,8 @@
             <p:inputText id="cantidad" value="#{productoventaController.selected.cantidad}" title="#{bundle.EditProductoventaTitle_cantidad}" required="true" requiredMessage="#{bundle.EditProductoventaRequiredMessage_cantidad}"/>
             <p:outputLabel value="#{bundle.EditProductoventaLabel_importe}" for="importe" />
             <p:inputText id="importe" value="#{productoventaController.selected.importe}" title="#{bundle.EditProductoventaTitle_importe}" required="true" requiredMessage="#{bundle.EditProductoventaRequiredMessage_importe}"/>
+            <p:outputLabel value="#{bundle.EditProductoventaLabel_altoAncho}" for="altoAncho" />
+            <p:inputText id="altoAncho" value="#{productoventaController.selected.altoAncho}" title="#{bundle.EditProductoventaTitle_altoAncho}" required="true" requiredMessage="#{bundle.EditProductoventaRequiredMessage_altoAncho}"/>
             <p:outputLabel value="#{bundle.EditProductoventaLabel_idProducto}" for="idProducto" />
             <p:selectOneMenu id="idProducto" value="#{productoventaController.selected.idProducto}" required="true" requiredMessage="#{bundle.EditProductoventaRequiredMessage_idProducto}">
               <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>

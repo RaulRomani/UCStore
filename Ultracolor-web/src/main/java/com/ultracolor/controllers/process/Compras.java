@@ -4,6 +4,7 @@ import com.ultracolor.controllers.util.AccesoDB;
 import com.ultracolor.controllers.util.CantidadLetras;
 import com.ultracolor.controllers.util.JsfUtil;
 import com.ultracolor.controllers.util.Log4jConfig;
+import com.ultracolor.controllers.util.Mail;
 import com.ultracolor.entities.Credito;
 import com.ultracolor.entities.Proveedor;
 import com.ultracolor.entities.Producto;
@@ -18,9 +19,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -65,12 +68,14 @@ public class Compras implements Serializable {
 
   private List<Compra> compraList;
   private Compra compraSelected;
-  
+
   private Productocompra productoCompra;
   private Carrito carrito;
 
   private boolean comprobanteCredito;
   private String tipoProveedor;
+
+  private String pathReportePedidoComprasFile;
 
   @edu.umd.cs.findbugs.annotations.SuppressWarnings("SE_TRANSIENT_FIELD_NOT_RESTORED")
   private transient final org.slf4j.Logger logger = LoggerFactory.getLogger(Compras.class);
@@ -83,6 +88,14 @@ public class Compras implements Serializable {
     carrito.setComprobante("BOLETA");
     tipoProveedor = "REGISTRADO";
     proveedorSelected = new Proveedor();
+
+    String projectStage = FacesContext.getCurrentInstance().getApplication().getProjectStage().toString();
+    if (projectStage.equals("Production")) {
+      pathReportePedidoComprasFile = ResourceBundle.getBundle("/setup/deploy").getString("productionPedidoComprasFilePath");
+    } else if (projectStage.equals("Development")) {
+      pathReportePedidoComprasFile = ResourceBundle.getBundle("/setup/deploy").getString("developmentPedidoComprasFilePath");
+    }
+
   }
 
   public void agregarProducto() {
@@ -127,21 +140,21 @@ public class Compras implements Serializable {
     if (!carrito.getItems().isEmpty()) {
       idCompra = ejbFacadeCompra.grabarPedidoCompra(carrito, proveedorSelected, personal.getUsuario());
       reportePedidoCompra(idCompra);
-      
-      carrito= new Carrito();  // Limpiar carrito
+
+      carrito = new Carrito();  // Limpiar carrito
       JsfUtil.addSuccessMessage("El pedido de compra se realizo correctamente.");
       logger.info("SE AGREGO UNA COMPRA Y SU DETALLE");
     } else {
       JsfUtil.addErrorMessage("Primero agregue productos");
     }
   }
-  
-  public void grabarCompra(){
+
+  public void grabarCompra() {
 //    Integer cantidad = compraSelected.getProductocompraList().get(0).getCantidad();
 //    Boolean recibido = compraSelected.getProductocompraList().get(0).getRecibido();
-    
+
     ejbFacadeCompra.grabarCompra(compraSelected);
-    
+
     JsfUtil.addSuccessMessage("La compra se guardo correctamente.");
     logger.info("GRABAR COMPRA: OK");
 //    logger.info("CANTIDAD: " + cantidad +"  recibido: "+ recibido);
@@ -164,11 +177,11 @@ public class Compras implements Serializable {
       JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametro, new JREmptyDataSource());
 
       HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-      response.addHeader("Content-disposition", "attachment; filename=Proforma-" + proveedorSelected.getRuc()+ ".pdf");  //Works in chrome
+      response.addHeader("Content-disposition", "attachment; filename=Proforma-" + proveedorSelected.getRuc() + ".pdf");  //Works in chrome
       try (ServletOutputStream stream = response.getOutputStream()) {
         JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
         //JasperExportManager.exportReportToPdfFile(jasperPrint, "D://proveedors.pdf");
-        JasperPrintManager.printReport(jasperPrint, false);
+        //JasperPrintManager.printReport(jasperPrint, false);
 
         stream.flush();
       }
@@ -188,7 +201,6 @@ public class Compras implements Serializable {
     parametro.put("proveedor_razonSocial", proveedorSelected.getRazonSocial());
     parametro.put("proveedor_RUC", proveedorSelected.getRuc());
     parametro.put("proveedor_direccion", proveedorSelected.getDireccion());
-    
 
     File jasper = new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/reportes/compras/compras.jasper"));
     logger.info("OK REPORTE PEDIDO DE COMPRA");
@@ -198,12 +210,11 @@ public class Compras implements Serializable {
     JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametro, con);
 
     HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-    response.addHeader("Content-disposition", "attachment; filename=Proforma-" + proveedorSelected.getRuc()+ ".pdf");  //Works in chrome
+    response.addHeader("Content-disposition", "attachment; filename=Proforma-" + proveedorSelected.getRuc() + ".pdf");  //Works in chrome
     ServletOutputStream stream = response.getOutputStream();
 
     JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-    //JasperExportManager.exportReportToPdfFile(jasperPrint, "D://proveedors.pdf");
-    JasperPrintManager.printReport(jasperPrint, false);
+    JasperExportManager.exportReportToPdfFile(jasperPrint, pathReportePedidoComprasFile + "pedidoCompra.pdf");
 
     stream.flush();
     stream.close();
@@ -211,7 +222,34 @@ public class Compras implements Serializable {
     FacesContext.getCurrentInstance().responseComplete();
   }
 
-  
+  public void enviarCorreo() {
+    List<String> to = new ArrayList<>();
+    to.add(personal.getPersonal().getCorreo());
+    to.add(proveedorSelected.getCorreo());
+
+    if (personal.getPersonal().getCorreo() != null
+            && proveedorSelected.getCorreo() != null) {
+
+      String subject = "Pedido de compra - Ultracolor EIRL";
+
+      String htmlContent = "<p>Hola <b style='text-transform: uppercase'>" + proveedorSelected.getRazonSocial() + "</b>,</p>"
+              + "<p>Le hacemos el siguiente pedido</p>"
+              + "<br>"
+              + "<p>Atte. Ultra Color EIRL</p>";
+
+      File file = new File(pathReportePedidoComprasFile + "pedidoCompra.pdf");
+      List<File> files = new ArrayList<>();
+      files.add(file);
+
+      for (String dest : to) {
+        Mail.sendEmail(dest, subject, htmlContent, files);
+      }
+
+    } else {
+      JsfUtil.addErrorMessage("Registre el correo de el proveedor y usuario");
+    }
+
+  }
 
   public List<Proveedor> getProveedorList() {
 //    if (proveedorList == null) {
@@ -219,16 +257,14 @@ public class Compras implements Serializable {
 //    }
     return proveedorList;
   }
-  
-  
-  
+
   public List<Compra> getCompraList() {
 //    if (proveedorList == null) {
     compraList = ejbFacadeCompra.findByEstado("ESPERA");
 //    }
     return compraList;
   }
-  
+
   public void prepareCompra() {
     compraSelected = new Compra();
   }
@@ -236,8 +272,8 @@ public class Compras implements Serializable {
   public void prepareProveedor() {
     proveedorSelected = new Proveedor();
   }
-  
-  public void loadProveedor(){
+
+  public void loadProveedor() {
     proveedorSelected = compraSelected.getIdProveedor();
   }
 
@@ -316,7 +352,5 @@ public class Compras implements Serializable {
   public void setCompraSelected(Compra compraSelected) {
     this.compraSelected = compraSelected;
   }
-  
-  
 
 }

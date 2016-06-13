@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="421" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="8ea5f271-b3a6-4d4f-9e25-16a1b8af86c4">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="177"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -36,6 +36,7 @@
 		<field name="precioProducto" class="java.math.BigDecimal"/>
 		<field name="cantidad" class="java.lang.Integer"/>
 		<field name="importe" class="java.math.BigDecimal"/>
+		<field name="altoAncho" class="java.lang.String"/>
 		<variable name="total" class="java.lang.Float" calculation="Sum">
 			<variableExpression><![CDATA[$F{importe}]]></variableExpression>
 		</variable>
@@ -217,7 +218,7 @@
 							<jr:detailCell style="table 2_TD" height="30" rowSpan="1">
 								<textField>
 									<reportElement x="0" y="0" width="305" height="20" uuid="7d67a1fc-ad2b-4f24-9e4f-0a78674b14e7"/>
-									<textFieldExpression><![CDATA[$F{nombreProducto}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{nombreProducto}.equals("Gigantografia") ? $F{nombreProducto} + " " + $F{altoAncho} : $F{nombreProducto}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -246,7 +247,7 @@
 							<textField>
 								<reportElement x="0" y="0" width="61" height="20" uuid="97f9a05b-d3c2-4923-90cb-44f096088bfc"/>
 								<textElement textAlignment="Right"/>
-								<textFieldExpression><![CDATA[$F{nombreProducto}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{precioProducto}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

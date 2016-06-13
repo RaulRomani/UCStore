@@ -63,7 +63,7 @@
     </filter-mapping>
     
     
-    
+    <!--        NORMAL    -->
     
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

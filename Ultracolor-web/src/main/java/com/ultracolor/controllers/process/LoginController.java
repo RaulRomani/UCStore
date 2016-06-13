@@ -186,11 +186,29 @@ public class LoginController implements Serializable {
     }
     FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "login?faces-redirect=true");
   }
+  
+  public void prepareUpdateCredentials(){
+    usuario.setPassword("");
+  }
+  
+  public void updateCredentials() throws FileNotFoundException {
+    
+    String password =usuario.getPassword();
+    String salt = usuario.getUsername();
+    usuario.setPassword(sha512(password,salt));
+    if (file != null) 
+      uploadFoto();
+    
+    persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UsuarioUpdated"));
+  }
 
   public void update() throws FileNotFoundException {
     if (file != null) {
       uploadFoto();
       logger.info("Upload foto OK");
+//      String password =usuario.getPassword();
+//      String salt = usuario.getUsername();
+//      usuario.setPassword(sha512(password,salt));
     }
     persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PersonalUpdated"));
     //load photo  - Si fuera Ajax
@@ -203,6 +221,7 @@ public class LoginController implements Serializable {
     if (personal != null) {
       try {
         if (persistAction != JsfUtil.PersistAction.DELETE) {
+          
           ejbFacadePersonal.edit(personal);
           ejbFacadeUsuario.edit(usuario);
           logger.info("EDIT loginController OK");

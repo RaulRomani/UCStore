@@ -20,6 +20,7 @@ public class CarritoItem {
   private BigDecimal precioProducto;
   private Integer cantidad;
   private BigDecimal importe;
+  private String altoAncho;
 
   public Integer getIdProducto() {
     return idProducto;
@@ -60,9 +61,13 @@ public class CarritoItem {
   public void setImporte(BigDecimal importe) {
     this.importe = importe;
   }
-  
-  
-  
-  
+
+  public String getAltoAncho() {
+    return altoAncho;
+  }
+
+  public void setAltoAncho(String altoAncho) {
+    this.altoAncho = altoAncho;
+  }
   
 }

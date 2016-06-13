@@ -65,7 +65,7 @@
               <p:commandButton value="Aceptar" id="agregar"
                                oncomplete="PF('ProductoSearchDialog').hide()" 
                                update=":DatosCarrito"
-                               disabled="#{empty ventas.productoSelected || ventas.productoSelected.stock == 0 ? true:false }">
+                               disabled="#{ empty ventas.productoSelected or ventas.productoSelected.stock == 0 and ventas.productoSelected.tipo.equals('PRODUCTO') ? true:false }">
                 <!--<p:resetInput target=":DatosCarrito:diente" />-->
               </p:commandButton>
             </f:facet>

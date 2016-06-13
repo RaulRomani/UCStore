@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,13 +33,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "pago")
 @XmlRootElement
+@Cacheable(false)
 @NamedQueries({
   @NamedQuery(name = "Pago.findAll", query = "SELECT p FROM Pago p"),
   @NamedQuery(name = "Pago.findByIdPago", query = "SELECT p FROM Pago p WHERE p.idPago = :idPago"),
   @NamedQuery(name = "Pago.findByDescripcion", query = "SELECT p FROM Pago p WHERE p.descripcion = :descripcion"),
   @NamedQuery(name = "Pago.findByMonto", query = "SELECT p FROM Pago p WHERE p.monto = :monto"),
   @NamedQuery(name = "Pago.findByFechaHora", query = "SELECT p FROM Pago p WHERE p.fechaHora = :fechaHora"),
-  @NamedQuery(name = "Pago.findByTipo", query = "SELECT p FROM Pago p WHERE p.tipo = :tipo")})
+  @NamedQuery(name = "Pago.findByTipo", query = "SELECT p FROM Pago p WHERE p.tipo = :tipo"),
+  @NamedQuery(name = "Pago.findByPersonal", query = "SELECT p FROM Pago p WHERE p.idPersonal = :idPersonal and p.fechaHora BETWEEN :startDate AND :endDate")})
 public class Pago implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
@@ -55,13 +58,12 @@ public class Pago implements Serializable {
   @Column(name = "monto")
   private BigDecimal monto;
   @Basic(optional = false)
-  @NotNull
   @Column(name = "fechaHora")
   @Temporal(TemporalType.TIMESTAMP)
   private Date fechaHora;
   @Basic(optional = false)
   @NotNull
-  @Size(min = 1, max = 10)
+  @Size(min = 1, max = 11)
   @Column(name = "tipo")
   private String tipo;
   @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")

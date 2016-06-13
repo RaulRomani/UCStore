@@ -61,7 +61,7 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
     if(cliente.getIdCliente() != null) // si es cliente registrado
       venta.setIdCliente(cliente);
     venta.setIdUsuario(usuario);
-    venta.setEstado("CANCELADO");
+    venta.setEstado("ESPERA");
 
     try {
       em.persist(venta);
@@ -74,6 +74,8 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
         productoVenta.setCantidad(i.getCantidad());
         productoVenta.setImporte(i.getImporte());
         productoVenta.setIdProducto(new Producto(i.getIdProducto()));
+        if(i.getNombreProducto().equals("Gigantografia"))
+          productoVenta.setAltoAncho(i.getAltoAncho());
         productoVenta.setIdVenta(venta); //para persistencia 1 a muchos
 
         //productoVenta.setProductoventaPK(new ProductoventaPK(venta.getIdVenta(), i.getIdProducto()));
@@ -139,6 +141,8 @@ public class VentaFacade extends AbstractFacade<Venta> implements VentaFacadeLoc
         productoVenta.setCantidad(i.getCantidad());
         productoVenta.setImporte(i.getImporte());
         productoVenta.setIdProducto(new Producto(i.getIdProducto()));
+        if(i.getNombreProducto().equals("Gigantografia"))
+          productoVenta.setAltoAncho(i.getAltoAncho());
         productoVenta.setIdVenta(venta); //para persistencia 1 a muchos
         //productoVenta.setProductoventaPK(new ProductoventaPK(venta.getIdVenta(), i.getIdProducto()));
 

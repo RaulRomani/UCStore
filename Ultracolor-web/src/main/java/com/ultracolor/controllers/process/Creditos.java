@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -62,7 +63,8 @@ public class Creditos implements Serializable{
   private Credito creditoSelected;
   private Integer cuotas;
   
-  final static org.apache.log4j.Logger logger = Log4jConfig.getLogger(Creditos.class.getName());
+  @edu.umd.cs.findbugs.annotations.SuppressWarnings("SE_TRANSIENT_FIELD_NOT_RESTORED")
+  private transient final org.slf4j.Logger logger = LoggerFactory.getLogger(Creditos.class);
   
   @PostConstruct
   void init() {

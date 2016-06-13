@@ -1,5 +1,6 @@
 package com.ultracolor.controllers;
 
+import com.ultracolor.controllers.process.Pagos;
 import com.ultracolor.entities.Pago;
 import com.ultracolor.controllers.util.JsfUtil;
 import com.ultracolor.controllers.util.JsfUtil.PersistAction;
@@ -18,6 +19,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.slf4j.LoggerFactory;
 
 @Named("pagoController")
 @SessionScoped
@@ -27,6 +29,9 @@ public class PagoController implements Serializable {
   private com.ultracolor.facades.PagoFacadeLocal ejbFacade;
   private List<Pago> items = null;
   private Pago selected;
+  
+  @edu.umd.cs.findbugs.annotations.SuppressWarnings("SE_TRANSIENT_FIELD_NOT_RESTORED")
+  private transient final org.slf4j.Logger logger = LoggerFactory.getLogger(Pagos.class);
 
   public PagoController() {
   }
@@ -78,6 +83,7 @@ public class PagoController implements Serializable {
     if (items == null) {
       items = getFacade().findAll();
     }
+    logger.info("GET ITEMS PAGO OK");
     return items;
   }
 

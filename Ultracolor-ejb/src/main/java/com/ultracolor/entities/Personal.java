@@ -6,6 +6,7 @@
 package com.ultracolor.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -40,6 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(name = "Personal.findByApellido", query = "SELECT p FROM Personal p WHERE p.apellido = :apellido"),
   @NamedQuery(name = "Personal.findByCargo", query = "SELECT p FROM Personal p WHERE p.cargo = :cargo"),
   @NamedQuery(name = "Personal.findByDni", query = "SELECT p FROM Personal p WHERE p.dni = :dni"),
+  @NamedQuery(name = "Personal.findBySueldo", query = "SELECT p FROM Personal p WHERE p.sueldo = :sueldo"),
   @NamedQuery(name = "Personal.findByEspecialidad", query = "SELECT p FROM Personal p WHERE p.especialidad = :especialidad"),
   @NamedQuery(name = "Personal.findByCorreo", query = "SELECT p FROM Personal p WHERE p.correo = :correo"),
   @NamedQuery(name = "Personal.findByDireccion", query = "SELECT p FROM Personal p WHERE p.direccion = :direccion"),
@@ -76,6 +78,11 @@ public class Personal implements Serializable {
   @Size(min = 1, max = 8)
   @Column(name = "DNI")
   private String dni;
+  // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "sueldo")
+  private BigDecimal sueldo;
   @Size(max = 100)
   @Column(name = "especialidad")
   private String especialidad;
@@ -117,12 +124,13 @@ public class Personal implements Serializable {
     this.idPersonal = idPersonal;
   }
 
-  public Personal(Integer idPersonal, String nombre, String apellido, String cargo, String dni, Date fechaCreacion) {
+  public Personal(Integer idPersonal, String nombre, String apellido, String cargo, String dni, BigDecimal sueldo, Date fechaCreacion) {
     this.idPersonal = idPersonal;
     this.nombre = nombre;
     this.apellido = apellido;
     this.cargo = cargo;
     this.dni = dni;
+    this.sueldo = sueldo;
     this.fechaCreacion = fechaCreacion;
   }
 
@@ -139,7 +147,7 @@ public class Personal implements Serializable {
   }
   
   public String getNombreCompleto() {
-    return nombre + " " + apellido;
+    return nombre+ " " +apellido;
   }
 
   public void setNombre(String nombre) {
@@ -168,6 +176,14 @@ public class Personal implements Serializable {
 
   public void setDni(String dni) {
     this.dni = dni;
+  }
+
+  public BigDecimal getSueldo() {
+    return sueldo;
+  }
+
+  public void setSueldo(BigDecimal sueldo) {
+    this.sueldo = sueldo;
   }
 
   public String getEspecialidad() {

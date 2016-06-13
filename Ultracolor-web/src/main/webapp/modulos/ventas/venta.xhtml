@@ -82,6 +82,25 @@
                   </div>
                 </div>
               </h:panelGroup>
+              
+              <h:panelGroup id="gigantografia" rendered="#{ventas.productoSelected.nombre == 'Gigantografia'}">
+                <div class="form-group row">
+                  <div class="col-sm-3">
+                    <p:outputLabel class="form-control-label"  value="Alto" for="alto"/>
+                  </div>
+                  <div class="col-sm-9">
+                    <p:inputText id="alto" value="#{ventas.alto}" required="true" requiredMessage="Ingrese el campo Alto"/>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-3">
+                    <p:outputLabel class="form-control-label"  value="Ancho" for="ancho" />
+                  </div>
+                  <div class="col-sm-9">
+                    <p:inputText id="ancho" value="#{ventas.ancho}" required="true" requiredMessage="Ingrese el campo Ancho"/>
+                  </div>
+                </div>
+              </h:panelGroup>
 
               <div class="form-group row">
                 <div class="col-sm-3">
@@ -101,11 +120,12 @@
             <div class="col-xs-9 ventas-right">
 
               <p:dataTable id="datalist" value="#{ventas.carrito.items}" var="item" emptyMessage="Agregue productos o servicios.">
-                <p:column style="text-align: center">
+                <p:column style="text-align: center; width: 60px;" >
                   <f:facet name="header">
-                    <h:outputText value="Cantidad"/>
+                    <h:outputText value="Cant."/>
                   </f:facet>
-                  <p:inputText id="cantidad" value="#{item.cantidad}" style="width: 50px;" >
+                  <p:inputText id="cantidad" value="#{item.cantidad}" style="width: 40px;"
+                               disabled="#{item.nombreProducto == 'Gigantografia'}">
                     <p:ajax event="keyup" 
                             delay="300"
                             listener="#{ventas.handleChangeCantidad(item)}" 
@@ -118,6 +138,8 @@
                     <h:outputText value="Producto" />
                   </f:facet>
                   <h:outputText value="#{item.nombreProducto}"/>
+                  <h:outputText value=" #{item.altoAncho}" 
+                                rendered="#{item.nombreProducto == 'Gigantografia'}"/>
                 </p:column>
                 <p:column>
                   <f:facet name="header">
@@ -131,7 +153,7 @@
                   </f:facet>
                   <h:outputText id="importe" value="#{item.importe}"/>
                 </p:column>
-                <p:column headerText="Acción">
+                <p:column style="text-align: center; width: 60px;">
                   <p:commandLink actionListener="#{ventas.eliminarProducto(item)}" 
                                  class="btn btn-sm btn-danger action-btn"
                                  update="CarritoListForm:datalist, CarritoListForm:total">
@@ -184,7 +206,7 @@
                       <p:commandButton value="Guardar venta" 
                                        icon="fa fa-save"
                                        actionListener="#{ventas.grabarVentaContado()}"
-                                       update=":growl"
+                                       update=":growl,:CarritoListForm:datalist"
                                        ajax="false"/>
                     </p:tab>
 
@@ -260,7 +282,7 @@
                         <div class="col-sm-9">
                           <p:commandButton value="Guardar venta" actionListener="#{ventas.grabarVentaCreditos()}"
                                            icon="fa fa-save"
-                                           update=":growl" ajax="false"/>
+                                           update=":growl, :CarritoListForm:datalist" ajax="false"/>
                         </div>
                       </div>
 

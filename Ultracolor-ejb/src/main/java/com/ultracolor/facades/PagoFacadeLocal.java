@@ -6,6 +6,7 @@
 package com.ultracolor.facades;
 
 import com.ultracolor.entities.Pago;
+import com.ultracolor.entities.Personal;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -29,5 +30,7 @@ public interface PagoFacadeLocal {
   List<Pago> findRange(int[] range);
 
   int count();
+  
+  public List<Pago> findByPersonal(Personal personal, String fechaHora);
   
 }

@@ -37,8 +37,6 @@
 
     <title><ui:insert name="title">Ultracolor</ui:insert></title>
 
-    <!--<f:event type="preRenderView" listener="{loginController.checkSession()}" />-->
-    <!--<f:viewAction action="{loginController.checkSession()}" /> -->
   </h:head>
 
   <h:body>
@@ -48,7 +46,7 @@
     <!-- Custom CSS -->
     <h:outputStylesheet name="/css/custom.css"/>
 
-    <h:form>
+    <h:form id="MainMenu">
       <nav class="navbar navbar-default">
         <div class="container-fluid">
           <!-- Brand and toggle get grouped for better mobile display -->
@@ -92,8 +90,8 @@
                   </ul>
                 </li>
               </h:panelGroup>
-              
-              
+
+
               <h:panelGroup rendered="#{loginController.usuario.authority.equals('ROLE_ADMIN')}"> 
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
@@ -104,6 +102,18 @@
                     </li>
                     <li class="#{view.viewId eq '/modulos/compras/compra.xhtml' ? 'active' : ''}">
                       <h:link outcome="/modulos/compras/compra"><i class="fa fa-fw fa-check-square-o  "></i> Confirmación</h:link>
+                    </li>
+                  </ul>
+                </li>
+              </h:panelGroup>
+
+              <h:panelGroup rendered="#{loginController.usuario.authority.equals('ROLE_ADMIN')}"> 
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" 
+                     aria-expanded="false"><i class="fa fa-fw fa-money"></i> Pagos <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li class="#{view.viewId eq '/modulos/pagos/pago.xhtml' ? 'active' : ''}">
+                      <h:link outcome="/modulos/pagos/pago"><i class="fa fa-fw fa-money  "></i> Realizar pago</h:link>
                     </li>
                   </ul>
                 </li>
@@ -151,7 +161,7 @@
                     <li class="#{view.viewId eq '/modulos/mantenimiento/venta/List.xhtml' ? 'active' : ''}">
                       <h:link outcome="/modulos/mantenimiento/venta/List">Venta</h:link>
                     </li>
-                    
+
                   </ul>
                 </li>
               </h:panelGroup>
@@ -167,38 +177,40 @@
                 </h:link>
               </li>
             </h:panelGroup>-->
+            <h:panelGroup id="RightMenu"> 
+              <ul class="nav navbar-nav navbar-right">
+                <!--<li><a href="#">Link</a></li>-->
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" 
+                     aria-haspopup="true" aria-expanded="false">
+                    <h:panelGroup rendered="#{loginController.image != null}">
+                      <p:graphicImage class="foto-user"
+                                      value="#{loginController.image}"
+                                      cache="false"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{loginController.image == null}">
+                      <i class="fa fa-user"></i>&nbsp;
+                    </h:panelGroup>
+                    <h:outputLabel value="#{loginController.personal.nombreCompleto}"/> <span class="caret"></span>
+                  </a>
 
-            <ul class="nav navbar-nav navbar-right">
-              <!--<li><a href="#">Link</a></li>-->
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" 
-                   aria-haspopup="true" aria-expanded="false">
-                  <h:panelGroup rendered="#{loginController.image != null}">
-                    <p:graphicImage class="foto-user"
-                                    value="#{loginController.image}"
-                                    cache="false"/>
-                  </h:panelGroup>
-                  <h:panelGroup rendered="#{loginController.image == null}">
-                    <i class="fa fa-user"></i>&nbsp;
-                  </h:panelGroup>
-                  <h:outputLabel value="#{loginController.personal.nombreCompleto}"/> <span class="caret"></span>
-                </a>
+                  <ul class="dropdown-menu">
+                    <li class="#{view.viewId eq '/perfil.xhtml' ? 'active' : ''}">
+                      <h:link outcome="/perfil">
+                        <i class="fa fa-fw fa-user"></i> Perfil
+                      </h:link>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                      <h:outputLink value="#{request.contextPath}/j_spring_security_logout">
+                        <i class="fa fa-fw fa-power-off"></i> Cerrar sesión
+                      </h:outputLink>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </h:panelGroup>
 
-                <ul class="dropdown-menu">
-                  <li class="#{view.viewId eq '/perfil.xhtml' ? 'active' : ''}">
-                    <h:link outcome="/perfil">
-                      <i class="fa fa-fw fa-user"></i> Perfil
-                    </h:link>
-                  </li>
-                  <li class="divider"></li>
-                  <li>
-                    <h:outputLink value="#{request.contextPath}/j_spring_security_logout">
-                      <i class="fa fa-fw fa-power-off"></i> Cerrar sesión
-                    </h:outputLink>
-                  </li>
-                </ul>
-              </li>
-            </ul>
           </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
       </nav>  

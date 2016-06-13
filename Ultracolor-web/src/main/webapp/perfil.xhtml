@@ -19,8 +19,7 @@
         <div class="row">
           <h:form id="UpdateUserForm" enctype="multipart/form-data" acceptcharset="ISO-8859-1">
             <div class="col-lg-2">
-              <p:graphicImage id="showImage"
-                              alt="Foto" 
+              <p:graphicImage alt="Foto" 
                               class="MostrarImagen" width="150px"
                               value="#{loginController.image}"
                               cache="false"/>
@@ -79,18 +78,20 @@
                 </div>
               </div>
               <div class="form-group row">
-                <p:outputLabel class="col-sm-3 form-control-label" value="#{bundle.EditUsuarioLabel_usuario}" for="usuario" />
-
-
-
+                <p:outputLabel class="col-sm-3 form-control-label" value="#{bundle.EditUsuarioLabel_username}" />
                 <div class="col-sm-9">
-                  <p:inputText class="form-control" id="usuario" value="#{loginController.usuario.usuario}" title="#{bundle.EditUsuarioTitle_usuario}" required="true" requiredMessage="#{bundle.EditUsuarioRequiredMessage_usuario}"/>
+                  <p:outputLabel class="form-control" value="#{loginController.usuario.username}" title="#{bundle.EditUsuarioTitle_username}"/>
                 </div>
               </div>
               <div class="form-group row">
-                <p:outputLabel class="col-sm-3 form-control-label" value="#{bundle.EditUsuarioLabel_clave}" for="clave" />
+                <p:outputLabel class="col-sm-3 form-control-label" value="#{bundle.EditUsuarioLabel_password}" />
                 <div class="col-sm-9">
-                  <p:inputText class="form-control" id="clave" type="password" value="#{loginController.usuario.clave}" title="#{bundle.EditUsuarioTitle_clave}" required="true" requiredMessage="#{bundle.EditUsuarioRequiredMessage_clave}"/>
+                  
+                  <p:commandButton actionListener="#{loginController.prepareUpdateCredentials()}"
+                                   value="Cambiar" 
+                                   icon="fa fa-edit"
+                                   update="UsuarioEditForm"
+                                   oncomplete="PF('UsuarioEditDialog').show()" />
                 </div>
               </div>
             </div>
@@ -100,11 +101,13 @@
               <p:commandButton actionListener="#{loginController.update()}"  
                                value="Guardar" 
                                icon="fa fa-save"
-                               update=":UpdateUserForm,growl"/>
+                               update=":UpdateUserForm,growl,MainMenu:RightMenu"/>
             </div>
           </h:form>
         </div>
       </div>
+        
+      <ui:include src="cambiarPassword.xhtml"/>
     </ui:define>
   </ui:composition>
 </html>

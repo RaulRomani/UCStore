@@ -38,6 +38,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -82,8 +83,12 @@ public class Ventas implements Serializable {
   private Venta venta;
   private boolean comprobanteCredito;
   private String tipoCliente;
+  
+  private Float alto;
+  private Float ancho;
 
-  final static Logger logger = Log4jConfig.getLogger(Ventas.class.getName());
+  @edu.umd.cs.findbugs.annotations.SuppressWarnings("SE_TRANSIENT_FIELD_NOT_RESTORED")
+  private transient final org.slf4j.Logger logger = LoggerFactory.getLogger(Ventas.class);
 
   @PostConstruct
   void init() {
@@ -102,19 +107,31 @@ public class Ventas implements Serializable {
 
   public void agregarProducto() {
     if (productoSelected != null) {
+      
       BigDecimal precio = productoSelected.getPrecioVenta();
-      Integer cantidad = 1;
-      BigDecimal importe = precio.multiply(new BigDecimal(cantidad));
+      
+      if(productoSelected.getNombre().equals("Talonario Boleta")){
+        //Hacer descuento
+        //precio = precio.multiply(new BigDecimal(alto * ancho));
+      }
 
       CarritoItem item = new CarritoItem();
       item.setIdProducto(productoSelected.getIdProducto());
       item.setNombreProducto(productoSelected.getNombre());
+      
+      Integer cantidad = 1;
+      BigDecimal importe;
+      if(productoSelected.getNombre().equals("Gigantografia")){
+        item.setAltoAncho(alto + "x" + ancho);
+        importe = precio.multiply(new BigDecimal(cantidad * alto * ancho));
+      } else {
+        importe = precio.multiply(new BigDecimal(cantidad));
+      }
+      
       item.setPrecioProducto(precio);
       item.setCantidad(cantidad);
       item.setImporte(importe);
-//      if (productoVenta.getDiente() != null) {
-//        item.setDiente(productoVenta.getDiente());
-//      }
+      
       carrito.add(item);
       logger.info("Producto agregado cantidad: " + carrito.getItems().size());
     } else {
@@ -124,6 +141,11 @@ public class Ventas implements Serializable {
 
   public void eliminarProducto(CarritoItem carritoItem) {
     int index = carrito.getItems().indexOf(carritoItem);
+    
+    if(carrito.getItems().get(index).getNombreProducto().equals("Gigantografia")){
+        alto = null;
+        ancho = null;
+      }
     carrito.getItems().remove(index);
     JsfUtil.addErrorMessage("El producto se eliminó correctamente.");
     logger.info("Eliminar producto OK");
@@ -209,6 +231,7 @@ public class Ventas implements Serializable {
         JasperPrintManager.printReport(jasperPrint, false);
 
         stream.flush();
+        stream.close();
       }
 
       FacesContext.getCurrentInstance().responseComplete();
@@ -238,7 +261,7 @@ public class Ventas implements Serializable {
     JasperPrint jasperPrint = JasperFillManager.fillReport(jasper.getPath(), parametro, con);
 
     HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-    response.addHeader("Content-disposition", "attachment; filename=Comprobante-" + clienteSelected.getDni() + ".pdf");  //Works in chrome
+    response.addHeader("Content-disposition", "filename=Comprobante-" + clienteSelected.getDni() + ".pdf");  //Works in chrome
     ServletOutputStream stream = response.getOutputStream();
 
     JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
@@ -378,5 +401,27 @@ public class Ventas implements Serializable {
   public void setTipoCliente(String tipoCliente) {
     this.tipoCliente = tipoCliente;
   }
+
+  public Float getAlto() {
+    return alto;
+  }
+
+  public void setAlto(Float alto) {
+    this.alto = alto;
+  }
+
+  public Float getAncho() {
+    return ancho;
+  }
+
+  public void setAncho(Float ancho) {
+    this.ancho = ancho;
+  }
+
+  
+
+  
+  
+  
 
 }

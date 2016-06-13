@@ -22,6 +22,7 @@ public class Carrito {
   private String formaPago;
   private String comprobante;
   private List<CarritoItem> items;
+  
 
 //  final static Logger logger = Log4jConfig.getLogger(Carrito.class.getName());
 
@@ -39,6 +40,7 @@ public class Carrito {
       if (i.getIdProducto()== item.getIdProducto()) {
         i.setCantidad(i.getCantidad() + item.getCantidad());
         i.setImporte(i.getImporte().add(item.getImporte()));
+        i.setAltoAncho(i.getAltoAncho() + ", " + item.getAltoAncho());
         encontro = true;
 //        logger.info("carrito no agregado ");
       }

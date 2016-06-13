@@ -29,12 +29,13 @@
     </appender>
 
     <!-- child level logging for application -->
+    <!--
     <logger name="edu.wctc.maven.glassfish.jsfsecure" level="DEBUG" />
-    <logger name="org.springframework" level="DEBUG" />
+    <logger name="org.springframework" level="DEBUG" /> -->
 
     <!-- root level logging (children can override) -->
-    <root level="DEBUG">
+    <root level="INFO"> 
         <!-- appender-ref ref="FILE" / -->
         <appender-ref ref="STDOUT" />
-    </root>
+    </root> 
 </configuration>

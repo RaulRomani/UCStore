@@ -19,6 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -32,7 +33,8 @@ import javax.xml.bind.annotation.XmlRootElement;
   @NamedQuery(name = "Productoventa.findAll", query = "SELECT p FROM Productoventa p"),
   @NamedQuery(name = "Productoventa.findByIdProductoVenta", query = "SELECT p FROM Productoventa p WHERE p.idProductoVenta = :idProductoVenta"),
   @NamedQuery(name = "Productoventa.findByCantidad", query = "SELECT p FROM Productoventa p WHERE p.cantidad = :cantidad"),
-  @NamedQuery(name = "Productoventa.findByImporte", query = "SELECT p FROM Productoventa p WHERE p.importe = :importe")})
+  @NamedQuery(name = "Productoventa.findByImporte", query = "SELECT p FROM Productoventa p WHERE p.importe = :importe"),
+  @NamedQuery(name = "Productoventa.findByAltoAncho", query = "SELECT p FROM Productoventa p WHERE p.altoAncho = :altoAncho")})
 public class Productoventa implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
@@ -49,6 +51,10 @@ public class Productoventa implements Serializable {
   @NotNull
   @Column(name = "importe")
   private BigDecimal importe;
+  @Basic(optional = false)
+  @Size(min = 1, max = 150)
+  @Column(name = "altoAncho")
+  private String altoAncho;
   @JoinColumn(name = "idProducto", referencedColumnName = "idProducto")
   @ManyToOne(optional = false)
   private Producto idProducto;
@@ -63,10 +69,11 @@ public class Productoventa implements Serializable {
     this.idProductoVenta = idProductoVenta;
   }
 
-  public Productoventa(Integer idProductoVenta, int cantidad, BigDecimal importe) {
+  public Productoventa(Integer idProductoVenta, int cantidad, BigDecimal importe, String altoAncho) {
     this.idProductoVenta = idProductoVenta;
     this.cantidad = cantidad;
     this.importe = importe;
+    this.altoAncho = altoAncho;
   }
 
   public Integer getIdProductoVenta() {
@@ -91,6 +98,14 @@ public class Productoventa implements Serializable {
 
   public void setImporte(BigDecimal importe) {
     this.importe = importe;
+  }
+
+  public String getAltoAncho() {
+    return altoAncho;
+  }
+
+  public void setAltoAncho(String altoAncho) {
+    this.altoAncho = altoAncho;
   }
 
   public Producto getIdProducto() {

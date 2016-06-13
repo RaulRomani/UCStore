@@ -31,7 +31,7 @@
             <p:outputLabel value="#{bundle.EditProductoLabel_fechaVencimiento}" for="fechaVencimiento" />
             <p:calendar id="fechaVencimiento" pattern="MM/dd/yyyy" value="#{productoController.selected.fechaVencimiento}" title="#{bundle.EditProductoTitle_fechaVencimiento}"  showOn="button"/>
             <p:outputLabel value="#{bundle.EditProductoLabel_stock}" for="stock" />
-            <p:inputText id="stock" value="#{productoController.selected.stock}" title="#{bundle.EditProductoTitle_stock}" required="true" requiredMessage="#{bundle.EditProductoRequiredMessage_stock}"/>
+            <p:inputText id="stock" value="#{productoController.selected.stock}" title="#{bundle.EditProductoTitle_stock}"/>
             <p:outputLabel value="#{bundle.EditProductoLabel_tipo}" for="tipo" />
             <p:inputText id="tipo" value="#{productoController.selected.tipo}" title="#{bundle.EditProductoTitle_tipo}" required="true" requiredMessage="#{bundle.EditProductoRequiredMessage_tipo}"/>
             <p:outputLabel value="#{bundle.EditProductoLabel_idCategoria}" for="idCategoria" />
